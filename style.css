@@ -1,0 +1,437 @@
+/* ちひろガチャ - 優しい水色テーマ */
+:root {
+  --bg-start: #dff1ff;
+  --bg-end: #bde0fe;
+  --accent: #74c0fc;
+  --text: #0b4668;
+  --white: #ffffff;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+/* iPhoneでの表示最適化 */
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  margin: 0;
+  font-family: 'M PLUS Rounded 1c', system-ui, -apple-system, 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'YuGothic', 'Meiryo', sans-serif;
+  color: var(--text);
+  background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 25%, #80deea 50%, #4dd0e1 75%, #26c6da 100%);
+  position: relative;
+  overflow-x: hidden;
+  /* iPhoneでのタッチ操作最適化 */
+  -webkit-overflow-scrolling: touch;
+  touch-action: manipulation;
+}
+
+/* 可愛らしい背景装飾 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('./牛.png');
+  background-size: 80px;
+  background-repeat: repeat;
+  background-position: center;
+  opacity: var(--cow-opacity, 0.15);
+  animation: cow-sway 12s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes cow-sway {
+  0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+  25% { transform: translateX(2px) translateY(-1px) rotate(0.5deg); }
+  50% { transform: translateX(-1px) translateY(1px) rotate(-0.3deg); }
+  75% { transform: translateX(1px) translateY(-0.5px) rotate(0.2deg); }
+}
+
+.page {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  align-items: start;
+  justify-items: center;
+  gap: 12px;
+  padding: 24px 16px 40px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 0 rgba(255,255,255,0.8);
+}
+
+.machine { display: grid; place-items: center; width: 100%; }
+
+/* 虹色に光るアニメーション */
+@keyframes rainbow-glow {
+  0% { filter: drop-shadow(0 12px 32px rgba(34, 139, 230, 0.25)) brightness(1) hue-rotate(0deg); }
+  16.66% { filter: drop-shadow(0 12px 32px rgba(255, 107, 107, 0.4)) brightness(1.1) hue-rotate(60deg); }
+  33.33% { filter: drop-shadow(0 12px 32px rgba(255, 193, 7, 0.4)) brightness(1.05) hue-rotate(120deg); }
+  50% { filter: drop-shadow(0 12px 32px rgba(76, 175, 80, 0.4)) brightness(1.1) hue-rotate(180deg); }
+  66.66% { filter: drop-shadow(0 12px 32px rgba(156, 39, 176, 0.4)) brightness(1.05) hue-rotate(240deg); }
+  83.33% { filter: drop-shadow(0 12px 32px rgba(255, 87, 34, 0.4)) brightness(1.1) hue-rotate(300deg); }
+  100% { filter: drop-shadow(0 12px 32px rgba(34, 139, 230, 0.25)) brightness(1) hue-rotate(360deg); }
+}
+
+/* ガチャ機の揺らすアニメーション */
+@keyframes gentle-sway {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-3px) rotate(-1deg); }
+  50% { transform: translateX(2px) rotate(0.5deg); }
+  75% { transform: translateX(-1px) rotate(-0.3deg); }
+}
+
+.machine img {
+  width: min(480px, 92vw);
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(34, 139, 230, 0.25);
+  user-select: none;
+  -webkit-user-drag: none;
+  animation: rainbow-glow 3s ease-in-out infinite, gentle-sway 4s ease-in-out infinite;
+}
+
+.controls { display: grid; place-items: center; margin-top: 8px; }
+
+.spin-button {
+  appearance: none;
+  border: none;
+  padding: 18px 36px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--white);
+  background: linear-gradient(90deg, #ff6b6b, #f7d34a, #51cf66, #339af0, #845ef7, #ff6b6b);
+  background-size: 300% 300%;
+  animation: rainbow-pan 6s linear infinite;
+  box-shadow: 0 8px 20px rgba(59,154,231,.35), inset 0 0 0 2px rgba(255,255,255,.5);
+  cursor: pointer;
+  transition: transform .08s ease, filter .2s ease;
+  /* iPhoneでのタッチ操作最適化 */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.spin-button:hover { filter: brightness(1.05); }
+.spin-button:active { transform: translateY(2px) scale(0.99); }
+
+@keyframes rainbow-pan {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* 揺れるアニメーション */
+@keyframes shake {
+  0% { transform: translateX(0) rotate(0); }
+  10% { transform: translateX(-6px) rotate(-2deg); }
+  20% { transform: translateX(6px) rotate(2deg); }
+  30% { transform: translateX(-5px) rotate(-1.6deg); }
+  40% { transform: translateX(5px) rotate(1.6deg); }
+  50% { transform: translateX(-4px) rotate(-1.2deg); }
+  60% { transform: translateX(4px) rotate(1.2deg); }
+  70% { transform: translateX(-3px) rotate(-0.8deg); }
+  80% { transform: translateX(3px) rotate(0.8deg); }
+  90% { transform: translateX(-2px) rotate(-0.4deg); }
+  100% { transform: translateX(0) rotate(0); }
+}
+
+.is-shaking {
+  animation: shake 0.9s ease-in-out both;
+}
+
+/* 激しく揺れる（抽選中の別画像用） */
+@keyframes hard-shake {
+  0%,100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  10% { transform: translateY(-50px) translateX(-20px) rotate(-15deg) scale(1.2); }
+  20% { transform: translateY(40px) translateX(25px) rotate(20deg) scale(0.8); }
+  30% { transform: translateY(-60px) translateX(-30px) rotate(-25deg) scale(1.3); }
+  40% { transform: translateY(55px) translateX(35px) rotate(30deg) scale(0.7); }
+  50% { transform: translateY(-70px) translateX(-40px) rotate(-35deg) scale(1.4); }
+  60% { transform: translateY(65px) translateX(45px) rotate(40deg) scale(0.6); }
+  70% { transform: translateY(-45px) translateX(-25px) rotate(-20deg) scale(1.1); }
+  80% { transform: translateY(35px) translateX(20px) rotate(15deg) scale(0.9); }
+  90% { transform: translateY(-25px) translateX(-10px) rotate(-10deg) scale(1.05); }
+}
+.is-hard-shaking { animation: hard-shake 1.1s ease-in-out both; }
+
+/* 勢いよく出てくるアニメーション */
+@keyframes burst-in {
+  0% { transform: scale(0.3) translateY(100px); opacity: 0; }
+  50% { transform: scale(1.2) translateY(-20px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+.burst-in { 
+  animation: burst-in 0.8s cubic-bezier(.2,1,.2,1) both;
+  /* iPhoneでのアニメーション最適化 */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* フェードアウト（回している画像を消す） */
+@keyframes fade-out {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.98); }
+}
+.fade-out { animation: fade-out .4s ease forwards; }
+
+/* 待機中の激しい揺れ（常時） */
+.idle-hard-shake { animation: hard-shake 1.25s ease-in-out infinite; }
+
+/* 全体光る演出 */
+@keyframes flash {
+  0% { opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+.flash {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  pointer-events: none;
+  z-index: 20;
+  opacity: 0;
+  visibility: hidden;
+}
+.flash.show { animation: flash 0.6s ease-out both; }
+
+/* ガチャガチャ文字 */
+.gacha-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  z-index: 15;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.gacha-text.show { opacity: 1; visibility: visible; }
+
+@keyframes text-shake {
+  0% { transform: translate(-50%, -50%) rotate(-2deg); }
+  25% { transform: translate(-50%, -50%) rotate(3deg); }
+  50% { transform: translate(-50%, -50%) rotate(-1deg); }
+  75% { transform: translate(-50%, -50%) rotate(2deg); }
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
+.gacha-text.show { animation: text-shake 0.3s ease-in-out infinite; }
+
+/* 大吉時の「おや…？」演出 */
+.oya {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .25s ease, visibility .25s ease;
+  z-index: 10;
+}
+.oya.show { opacity: 1; visibility: visible; }
+.oya-img { max-width: min(520px, 92vw); width: 100%; height: auto; filter: drop-shadow(0 16px 40px rgba(0,0,0,.5)); }
+.oya-text {
+  position: absolute;
+  top: 8%;
+  width: 100%;
+  text-align: center;
+  font-weight: 900;
+  font-size: 32px;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+
+@keyframes oya-slide-in {
+  0% { transform: translateX(100%) scale(0.8); opacity: 0; }
+  20% { transform: translateX(0) scale(1); opacity: 1; }
+  80% { transform: translateX(0) scale(1); opacity: 1; }
+  100% { transform: translateX(-100%) scale(0.8); opacity: 0; }
+}
+
+@keyframes oya-glow {
+  0% { filter: drop-shadow(0 16px 40px rgba(0,0,0,.5)) brightness(1); }
+  50% { filter: drop-shadow(0 16px 40px rgba(255,255,255,.8)) brightness(1.3) drop-shadow(0 0 20px rgba(255,255,255,.6)); }
+  100% { filter: drop-shadow(0 16px 40px rgba(0,0,0,.5)) brightness(1); }
+}
+
+.oya.show .oya-img { 
+  animation: oya-slide-in 3s ease-in-out both, oya-glow 1.5s ease-in-out infinite; 
+}
+
+@keyframes text-glow-oya {
+  0% { text-shadow: 0 2px 8px rgba(0,0,0,.35); }
+  50% { text-shadow: 0 2px 8px rgba(255,255,255,.8), 0 0 20px rgba(255,255,255,.6), 0 0 30px rgba(255,255,255,.4); }
+  100% { text-shadow: 0 2px 8px rgba(0,0,0,.35); }
+}
+.oya.show .oya-text { animation: text-glow-oya 1.5s ease-in-out infinite; }
+
+.result {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  min-height: 180px;
+}
+
+#resultImg {
+  max-width: min(420px, 88vw);
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+}
+
+.result-text {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.retry-button {
+  margin-top: 12px;
+  appearance: none;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--white);
+  background: linear-gradient(90deg, #74c0fc, #5e60ce);
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+  /* iPhoneでのタッチ操作最適化 */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.message-button {
+  margin-top: 8px;
+  appearance: none;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--white);
+  background: linear-gradient(90deg, #51cf66, #40c057);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(81,207,102,.3);
+  transition: transform .1s ease;
+  /* iPhoneでのタッチ操作最適化 */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.message-button:hover { transform: scale(1.02); }
+
+.special-button {
+  margin-top: 8px;
+  appearance: none;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--white);
+  background: linear-gradient(90deg, #ff6b6b, #feca57);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255,107,107,.3);
+  transition: transform .1s ease;
+  /* iPhoneでのタッチ操作最適化 */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.special-button:hover { transform: scale(1.02); }
+
+.note {
+  opacity: 0.8;
+  font-size: 13px;
+  text-align: center;
+}
+.cows { display: none; }
+
+@keyframes cow-wiggle {
+  0% { transform: translate(-2px, 0) rotate(-4deg) scale(1); }
+  50% { transform: translate(2px, 1px) rotate(4deg) scale(1.02); }
+  100% { transform: translate(-2px, 0) rotate(-4deg) scale(1); }
+}
+
+.cow {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  font-size: var(--size, 28px);
+  line-height: 1;
+  animation: cow-wiggle var(--dur, 2.2s) ease-in-out var(--delay, 0s) infinite;
+  text-shadow: 0 2px 3px rgba(0,0,0,.25);
+  will-change: transform;
+}
+
+/* 大吉「おや？」演出 */
+/* 旧「おや？」演出は削除 */
+
+/* パッカーン演出 */
+.burst {
+  position: fixed; inset: 0; display: grid; place-items: center;
+  pointer-events: none; z-index: 12; opacity: 0; visibility: hidden;
+  transition: opacity .2s ease, visibility .2s ease;
+}
+.burst.show { opacity: 1; visibility: visible; }
+.burst-img { max-width: min(560px, 92vw); width: 100%; height: auto; filter: drop-shadow(0 20px 40px rgba(0,0,0,.5)); }
+.burst-text { 
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  font-size: 36px; 
+  font-weight: 900; 
+  color: #fff; 
+  text-shadow: 0 2px 10px rgba(0,0,0,.45);
+  z-index: 1;
+}
+@keyframes burst-pop { 
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.burst.show .burst-img { animation: burst-pop .6s cubic-bezier(.2,1,.2,1) both, burst-glow 4s ease-in-out infinite; }
+
+/* パッカーン光る演出 */
+@keyframes burst-glow {
+  0% { filter: drop-shadow(0 20px 40px rgba(0,0,0,.5)) brightness(1); }
+  100% { filter: drop-shadow(0 20px 40px rgba(255,255,255,.9)) brightness(1.4) drop-shadow(0 0 25px rgba(255,255,255,.8)); }
+}
+.burst.show .burst-img { animation: burst-pop .6s cubic-bezier(.2,1,.2,1) both, burst-glow 4s ease-in-out infinite; }
+
+@keyframes text-glow {
+  0% { text-shadow: 0 2px 10px rgba(0,0,0,.45); }
+  100% { text-shadow: 0 2px 10px rgba(255,255,255,.9), 0 0 25px rgba(255,255,255,.8), 0 0 35px rgba(255,255,255,.6); }
+}
+.burst.show .burst-text { animation: text-glow 4s ease-in-out infinite; }
+
+/* レア演出（上からドン！） */
+.rare { position: fixed; inset: 0; display: grid; place-items: start center; pointer-events: none; z-index: 14; }
+.rare-img { width: min(520px, 88vw); height: auto; transform: translateY(-120%); filter: drop-shadow(0 30px 50px rgba(0,0,0,.55)); }
+@keyframes rare-drop { 0% { transform: translateY(-120%) scale(1.05); } 70% { transform: translateY(8%) scale(0.98); } 100% { transform: translateY(0) scale(1); } }
+.rare.show .rare-img { animation: rare-drop .6s cubic-bezier(.2,1,.1,1.1) both; }
+
+
