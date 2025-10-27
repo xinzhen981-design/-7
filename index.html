@@ -1,67 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ちひろガチャ</title>
-    <link rel="preload" as="image" href="./スクリーンショット 2025-07-30 16.55.24.png">
-    <link rel="preload" as="image" href="./中吉 (3).png">
-    <link rel="preload" as="image" href="./中吉 (5).png">
-    <link rel="preload" as="image" href="./中吉 (7).png">
-    <link rel="preload" as="image" href="./牛.png">
-    <link rel="preload" as="image" href="./ChatGPT Image 2025年7月30日 17_17_42.png">
-    <link rel="preload" as="image" href="./レア (17).png">
-    <link rel="stylesheet" href="./style.css">
-    <link href="https://fonts.googleapis.com/css2?family=M%2BPLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div class="cows" id="cowField" aria-hidden="true"></div>
-    <main class="page">
-      <h1 class="title">ちひろ ガチャ</h1>
-
-      <section class="machine">
-        <img id="machineImg" src="./スクリーンショット 2025-07-30 16.55.24.png" alt="ガチャガチャの機械" />
-      </section>
-
-      <div class="controls">
-        <button id="spinButton" class="spin-button" aria-label="ガチャを回す">回す</button>
-      </div>
-
-      <section class="result" aria-live="polite">
-        <img id="resultImg" alt="結果画像" />
-        <p id="resultText" class="result-text" hidden></p>
-        <button id="messageButton" class="message-button" hidden></button>
-        <button id="retryButton" class="retry-button" hidden>もう一度回す</button>
-        <button id="specialButton" class="special-button" hidden>ちひろからの特別なお知らせがあります</button>
-      </section>
-
-      
-
-      <div id="burstOverlay" class="burst" aria-hidden="true">
-        <img src="./ChatGPT Image 2025年7月30日 17_17_42.png" alt="パッカーン演出" class="burst-img" />
-        <div class="burst-text">パッカーン！！</div>
-      </div>
-
-      <div id="gachaText" class="gacha-text" aria-hidden="true">
-        ガチャガチャガチャ…
-      </div>
-
-      <div id="oyaOverlay" class="oya" aria-hidden="true">
-        <img src="./ChatGPT Image 2025年7月30日 17_07_33.png" alt="おや？の演出画像" class="oya-img" />
-        <div class="oya-text">おや…？</div>
-      </div>
-
-      <div id="rareOverlay" class="rare" aria-hidden="true">
-        <img src="./レア (17).png" alt="超激レア" class="rare-img" />
-      </div>
-
-      <div id="flashOverlay" class="flash" aria-hidden="true"></div>
-
-      <p class="note">何回でも回せます。大吉のときは数秒後に特別なページへ移動します。</p>
-    </main>
-
-    <script src="./script.js"></script>
-  </body>
-  </html>
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025年11月カレンダー</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header-image-wrapper">
+        <img src="TOP.png" alt="ヘッダー画像" class="header-image">
+    </div>
+    
+    <div class="info-box">
+        <div class="info-item">
+            <span class="info-icon">⏰</span>
+            <p>毎朝7時に更新されるよ！<br>聞いたらXでおはようしにきてね〜💛</p>
+        </div>
+        <div class="info-item">
+            <span class="info-icon">🎧</span>
+            <p>今日の日付をタップして、「聞く」を押すと音声が流れるよ！</p>
+        </div>
+        <div class="info-item">
+            <span class="info-icon">🐣</span>
+            <p>他の人に聞かれないようにイヤホンで聞いてね</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>2025年11月</h1>
+        </header>
+        
+        <div class="calendar">
+            <div class="weekdays">
+                <div class="weekday">日</div>
+                <div class="weekday">月</div>
+                <div class="weekday">火</div>
+                <div class="weekday">水</div>
+                <div class="weekday">木</div>
+                <div class="weekday">金</div>
+                <div class="weekday">土</div>
+            </div>
+            
+            <div class="days" id="calendar-days">
+                <!-- JavaScriptで日付を生成 -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
 

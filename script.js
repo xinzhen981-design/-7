@@ -1,217 +1,230 @@
-// ちひろガチャ ロジック
-(function () {
-  'use strict';
-
-  /**
-   * 確率設定
-   * - 小吉: 60%
-   * - 中吉: 30%
-   * - 大吉: 10%
-   */
-  const PROBABILITIES = {
-    small: 0.25, // 合計1にするため small+medium=0.6, big=0.4
-    medium: 0.35,
-    big: 0.4
-  };
-
-  const IMAGES = {
-    machine: './スクリーンショット 2025-07-30 16.55.24.png',
-    small: './中吉 (3).png',
-    medium: './中吉 (5).png',
-    big: './中吉 (7).png'
-  };
-
-  const BIG_URL = 'https://note.com/calm_worm6243/n/n768038a644d5';
-
-  const button = document.getElementById('spinButton');
-  const machineImg = document.getElementById('machineImg');
-  const resultImg = document.getElementById('resultImg');
-  const resultText = document.getElementById('resultText');
-  const retryButton = document.getElementById('retryButton');
-  const messageButton = document.getElementById('messageButton');
-  const specialButton = document.getElementById('specialButton');
-  const oya = document.getElementById('oyaOverlay');
-  const cowField = document.getElementById('cowField');
-  const burst = document.getElementById('burstOverlay');
-  const rare = document.getElementById('rareOverlay');
-  const gachaText = document.getElementById('gachaText');
-  const flash = document.getElementById('flashOverlay');
-
-  // 画像を先読み
-  [IMAGES.small, IMAGES.medium, IMAGES.big].forEach((src) => {
-    const img = new Image();
-    img.src = src;
-  });
-
-  // 初期表示で待機中アニメを適用
-  machineImg.classList.add('idle-hard-shake');
-
-  function drawResult() {
-    const r = Math.random();
-    if (r < PROBABILITIES.big) return 'big';
-    if (r < PROBABILITIES.big + PROBABILITIES.medium) return 'medium';
-    return 'small';
-  }
-
-  function show(result) {
-    // 結果表示ではテキストは使わず、画像のみ表示
-    resultText.hidden = true;
-    // 押下ボタン（メイン）は隠す、もう一度回すボタンを出す
-    button.disabled = true;
-    button.style.visibility = 'hidden';
-    switch (result) {
-      case 'big':
-        // バースト演出はボタン側で完了させる
-        burst.classList.remove('show');
-        // 大吉時は「おや…？」演出を先に表示
-        oya.classList.add('show');
-        setTimeout(() => {
-          oya.classList.remove('show');
-          resultImg.src = IMAGES.big;
-          // 特別ボタンを表示（自動遷移は削除）
-          specialButton.hidden = false;
-        }, 3000);
-        break;
-      case 'medium':
-        burst.classList.remove('show');
-        resultImg.src = IMAGES.medium;
-        // 中吉メッセージボタンを表示
-        messageButton.textContent = '中吉おめでとう！';
-        messageButton.hidden = false;
-        break;
-      default:
-        burst.classList.remove('show');
-        resultImg.src = IMAGES.small;
-        // 小吉メッセージボタンを表示
-        messageButton.textContent = '小吉おめでとう！';
-        messageButton.hidden = false;
-        break;
+// 本番環境：各日付の解放時刻を生成（午前7時）
+function generateUnlockSchedule() {
+    const schedule = {};
+    for (let day = 1; day <= 30; day++) {
+        schedule[day] = new Date(`2025-11-${String(day).padStart(2, '0')}T07:00:00`);
     }
-    // リトライボタンを表示
-    retryButton.hidden = false;
-  }
+    return schedule;
+}
 
-  function shakeOnce() {
-    machineImg.classList.remove('is-shaking');
-    // 再トリガー用にリフロー
-    void machineImg.offsetWidth;
-    machineImg.classList.add('is-shaking');
-  }
+const unlockSchedule = generateUnlockSchedule();
 
-  function hardShakeWithImage() {
-    // 抽選中は別画像に切替えて激しく揺らす
-    const originalSrc = machineImg.src;
-    machineImg.classList.remove('idle-hard-shake');
-    machineImg.src = './ChatGPT Image 2025年7月30日 17_15_27.png';
-    // 画像読み込み後にアニメーションを適用
-    machineImg.onload = () => {
-      // 勢いよく出てくるアニメーションを適用
-      machineImg.classList.add('burst-in');
-      // 出てくるアニメーション完了後に激しく揺れるアニメーションを開始
-      setTimeout(() => {
-        machineImg.classList.remove('burst-in');
-        machineImg.classList.add('is-hard-shaking');
-      }, 800);
-    };
-    return () => {
-      machineImg.classList.remove('is-hard-shaking');
-      // フェード後はガチャ機画像を非表示にする（結果が出るまで再表示しない）
-      machineImg.src = originalSrc;
-      machineImg.style.display = 'none';
-    };
-  }
+// 各日付の確認メッセージ（朝用）
+const confirmMessages = {
+    1: 'おはよう♡\n1日の音声を聴く？',
+    2: '今日も素敵な1日にしようね♡\n2日の音声を聴く？',
+    3: '朝だよ♡\n3日の音声を聴く？',
+    4: '今日も応援してるよ♡\n4日の音声を聴く？',
+    5: 'おはよう！今日も頑張ろうね♡\n5日の音声を聴く？',
+    6: '素敵な朝だね♡\n6日の音声を聴く？',
+    7: '1週間お疲れさま♡\n7日の音声を聴く？',
+    8: 'おはよう♡\n8日の音声を聴く？',
+    9: '今日もいい日になりますように♡\n9日の音声を聴く？',
+    10: '10日目だね♡\n音声を聴く？',
+    11: 'おはよう♡\n11日の音声を聴く？',
+    12: '今日も応援してるよ♡\n12日の音声を聴く？',
+    13: '朝だよ♡\n13日の音声を聴く？',
+    14: 'おはよう！元気だしてね♡\n14日の音声を聴く？',
+    15: '半分きたね♡\n15日の音声を聴く？',
+    16: 'おはよう♡\n16日の音声を聴く？',
+    17: '今日も素敵な1日にしようね♡\n17日の音声を聴く？',
+    18: 'おはよう♡\n18日の音声を聴く？',
+    19: '今日も頑張ろうね♡\n19日の音声を聴く？',
+    20: '20日目♡\n音声を聴く？',
+    21: 'おはよう♡\n21日の音声を聴く？',
+    22: '週末だね♡\n22日の音声を聴く？',
+    23: 'おはよう♡\n23日の音声を聴く？',
+    24: '今日も応援してるよ♡\n24日の音声を聴く？',
+    25: 'おはよう♡\n25日の音声を聴く？',
+    26: '今日も素敵な1日にしようね♡\n26日の音声を聴く？',
+    27: 'おはよう♡\n27日の音声を聴く？',
+    28: 'もうすぐ終わりだね♡\n28日の音声を聴く？',
+    29: 'おはよう♡\n29日の音声を聴く？',
+    30: '最終日♡ありがとう♡\n30日の音声を聴く？'
+};
 
-  // かわいい牛が走る演出をランダム生成
-  function spawnCow() {
-    if (!cowField) return;
-    const cow = document.createElement('div');
-    cow.className = 'cow';
-    cow.textContent = '🐮';
-    const y = Math.floor(Math.random() * 95); // 0〜95vh
-    const x = Math.floor(Math.random() * 95); // 0〜95vw
-    const size = Math.floor(Math.random() * 18) + 20; // 20〜38px
-    const dur = (Math.random() * 1.6 + 1.6).toFixed(2) + 's'; // 1.6〜3.2s
-    const delay = (Math.random() * 1.2).toFixed(2) + 's';
-    cow.style.setProperty('--y', y + 'vh');
-    cow.style.setProperty('--x', x + 'vw');
-    cow.style.setProperty('--size', size + 'px');
-    cow.style.setProperty('--dur', dur);
-    cow.style.setProperty('--delay', delay);
-    cowField.appendChild(cow);
-    // 一定時間後に消える
-    setTimeout(() => { cow.remove(); }, 8000);
-  }
+// 日付ボタンの参照を保持
+const dayButtons = {};
 
-  // 常時たくさん散らす
-  setInterval(() => {
-    const n = 4 + Math.floor(Math.random() * 6); // 4〜9個
-    for (let i = 0; i < n; i += 1) {
-      setTimeout(spawnCow, i * 120);
+// 2025年11月のカレンダーを生成
+function generateCalendar() {
+    const calendarDays = document.getElementById('calendar-days');
+    
+    // 2025年11月1日は土曜日（曜日番号: 6）
+    // 11月は30日まで
+    const firstDayOfWeek = 6; // 土曜日（0=日曜日, 6=土曜日）
+    const daysInMonth = 30;
+    
+    // 空白セルを追加（11月1日が土曜日なので、日曜から金曜までの6個の空白）
+    for (let i = 0; i < firstDayOfWeek; i++) {
+        const emptyDay = document.createElement('div');
+        calendarDays.appendChild(emptyDay);
     }
-  }, 1200);
+    
+    // 1日から30日までのボタンを生成
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = document.createElement('button');
+        dayElement.className = 'day';
+        dayElement.textContent = day;
+        dayElement.dataset.day = day; // data属性に日付を保存
+        
+        // 曜日を計算（0=日曜日, 6=土曜日）
+        const dayOfWeek = (firstDayOfWeek + day - 1) % 7;
+        
+        // 曜日に応じたクラスを追加
+        if (dayOfWeek === 0) {
+            dayElement.classList.add('sunday');
+        } else if (dayOfWeek === 6) {
+            dayElement.classList.add('saturday');
+        } else {
+            dayElement.classList.add('weekday');
+        }
+        
+        // 全ての日付にクリックイベントを追加
+        dayElement.addEventListener('click', () => playAudio(day));
+        dayButtons[day] = dayElement; // 参照を保持
+        
+        calendarDays.appendChild(dayElement);
+    }
+    
+    // 初回の状態更新
+    updateButtonStates();
+    
+    // 1秒ごとに状態をチェック
+    setInterval(updateButtonStates, 1000);
+}
 
-  button.addEventListener('click', () => {
-    const restore = hardShakeWithImage();
-    resultText.hidden = true;
-    resultImg.removeAttribute('src');
-    // 全体光る演出
-    flash.classList.add('show');
-    setTimeout(() => { flash.classList.remove('show'); }, 600);
+// ボタンの有効/無効状態を更新
+function updateButtonStates() {
+    const now = new Date();
+    
+    for (let day = 1; day <= 30; day++) {
+        const button = dayButtons[day];
+        const unlockTime = unlockSchedule[day];
+        
+        // 次の日の午前7時を計算（ロック時刻）
+        const lockTime = day < 30 
+            ? unlockSchedule[day + 1] 
+            : new Date('2025-12-01T07:00:00'); // 30日の場合は12月1日午前7時
+        
+        // 解放条件：解放時刻を過ぎている かつ ロック時刻前
+        if (now >= unlockTime && now < lockTime) {
+            // 解放済み：ボタンを有効化
+            button.classList.add('unlocked');
+            button.classList.remove('locked');
+        } else {
+            // 未解放またはロック済み：ボタンを無効化
+            button.classList.add('locked');
+            button.classList.remove('unlocked');
+        }
+    }
+}
 
-    // ドキドキさせるための待ち時間を長めに
-    const initialDelayMs = 2500; // 押下後の揺れ時間（2.5秒に変更）
-    const fadeDurationMs = 400; // フェードアウト時間 (CSS と一致)
-    const burstDurationMs = 4000; // バーストの見せ時間（4秒に延長）
-
-    // ガチャガチャ文字を表示
+// カスタムポップアップを表示する関数
+function showConfirmPopup(message, onConfirm, onCancel) {
+    // オーバーレイを作成
+    const overlay = document.createElement('div');
+    overlay.className = 'popup-overlay';
+    
+    // ポップアップを作成
+    const popup = document.createElement('div');
+    popup.className = 'popup';
+    
+    // メッセージを作成
+    const messageElement = document.createElement('p');
+    messageElement.className = 'popup-message';
+    messageElement.textContent = message;
+    
+    // ボタンコンテナを作成
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'popup-buttons';
+    
+    // OKボタン
+    const okButton = document.createElement('button');
+    okButton.className = 'popup-button popup-button-ok';
+    okButton.textContent = '聴く♡';
+    okButton.onclick = () => {
+        document.body.removeChild(overlay);
+        if (onConfirm) onConfirm();
+    };
+    
+    // キャンセルボタン
+    const cancelButton = document.createElement('button');
+    cancelButton.className = 'popup-button popup-button-cancel';
+    cancelButton.textContent = 'あとで';
+    cancelButton.onclick = () => {
+        document.body.removeChild(overlay);
+        if (onCancel) onCancel();
+    };
+    
+    // 要素を組み立て
+    buttonContainer.appendChild(cancelButton);
+    buttonContainer.appendChild(okButton);
+    popup.appendChild(messageElement);
+    popup.appendChild(buttonContainer);
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+    
+    // アニメーション用に少し遅延
     setTimeout(() => {
-      gachaText.classList.add('show');
-    }, 300);
+        overlay.classList.add('show');
+    }, 10);
+}
 
-    setTimeout(() => {
-      // 回している画像（差し替え中の machineImg）をフェードアウト
-      machineImg.classList.add('fade-out');
-      gachaText.classList.remove('show');
-      setTimeout(() => {
-        // バーストを表示
-        burst.classList.add('show');
-        // パッカーン演出中は背景の牛画像を非表示
-        document.body.style.setProperty('--cow-opacity', '0');
+// 音声を再生する関数
+function playAudio(day) {
+    const button = dayButtons[day];
+    
+    // 未解放の場合は再生しない
+    if (button.classList.contains('locked')) {
+        const now = new Date();
+        const unlockTime = unlockSchedule[day];
+        const lockTime = day < 30 
+            ? unlockSchedule[day + 1] 
+            : new Date('2025-12-01T07:00:00');
+        
+        let message;
+        if (now < unlockTime) {
+            // まだ解放されていない
+            const timeString = unlockTime.toLocaleString('ja-JP', {
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            message = `この音声は ${timeString} に解放されます♡`;
+        } else if (now >= lockTime) {
+            // 期限切れ
+            message = 'この音声の再生期限が過ぎました💦\n次の音声を楽しみにしていてね♡';
+        }
+        
+        alert(message);
+        return;
+    }
+    
+    // 確認メッセージを表示
+    const message = confirmMessages[day] || `おはよう♡\n${day}日の音声を聴く？`;
+    
+    showConfirmPopup(message, () => {
+        // OKが押された場合：音声を再生
+        const audioFileName = `声${day}.wav`;
+        const audio = new Audio(audioFileName);
+        
+        audio.play().catch(error => {
+            console.error(`音声ファイルの再生に失敗しました: ${audioFileName}`, error);
+            alert(`音声ファイル「${audioFileName}」の再生に失敗しました。`);
+        });
+        
+        // ボタンのフィードバック
+        button.style.transform = 'scale(0.95)';
         setTimeout(() => {
-          burst.classList.remove('show');
-          // パッカーン演出終了後、背景の牛画像を再表示
-          document.body.style.setProperty('--cow-opacity', '0.15');
-          machineImg.classList.remove('fade-out');
-          const result = drawResult();
-          show(result);
-        }, burstDurationMs);
-      }, fadeDurationMs);
-    }, initialDelayMs);
+            button.style.transform = 'scale(1)';
+        }, 100);
+    }, () => {
+        // キャンセルが押された場合：何もしない
+    });
+}
 
-    // 機械の画像は一定時間後に元へ
-    setTimeout(() => { restore(); }, initialDelayMs + fadeDurationMs + burstDurationMs + 120);
-  });
-
-  // もう一度回す: 初期状態に戻す
-  retryButton.addEventListener('click', () => {
-    retryButton.hidden = true;
-    messageButton.hidden = true;
-    specialButton.hidden = true;
-    resultImg.removeAttribute('src');
-    button.disabled = false;
-    button.style.visibility = 'visible';
-    // ガチャ機画像を再表示して初期状態へ
-    machineImg.style.display = '';
-    machineImg.classList.remove('fade-out', 'is-hard-shaking', 'is-shaking');
-    machineImg.src = IMAGES.machine;
-    // 待機中アニメを再開
-    machineImg.classList.add('idle-hard-shake');
-  });
-
-  // 特別ボタンクリックでnoteへ遷移
-  specialButton.addEventListener('click', () => {
-    window.location.href = BIG_URL;
-  });
-})();
-
+// ページ読み込み時にカレンダーを生成
+document.addEventListener('DOMContentLoaded', generateCalendar);
 
