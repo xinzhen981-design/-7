@@ -1,13 +1,16 @@
-// 本番環境：各日付の解放時刻を生成（午前7時）
-function generateUnlockSchedule() {
-    const schedule = {};
-    for (let day = 1; day <= 30; day++) {
-        schedule[day] = new Date(`2025-11-${String(day).padStart(2, '0')}T07:00:00`);
-    }
-    return schedule;
-}
+// テスト環境：1～3日のみ利用可能、11月5日7時まで聴ける
+const unlockSchedule = {
+    1: new Date('2025-11-01T07:00:00'),
+    2: new Date('2025-11-02T07:00:00'),
+    3: new Date('2025-11-03T07:00:00')
+};
 
-const unlockSchedule = generateUnlockSchedule();
+// 音声ファイルのマッピング
+const audioFileMapping = {
+    1: '声.6.wav',
+    2: '声.7.wav',
+    3: '声.8.wav'
+};
 
 // 各日付の確認メッセージ（朝用）
 const confirmMessages = {
@@ -80,9 +83,15 @@ function generateCalendar() {
             dayElement.classList.add('weekday');
         }
         
-        // 全ての日付にクリックイベントを追加
-        dayElement.addEventListener('click', () => playAudio(day));
-        dayButtons[day] = dayElement; // 参照を保持
+        // 1～3日のみクリックイベントを追加
+        if (day >= 1 && day <= 3) {
+            dayElement.addEventListener('click', () => playAudio(day));
+            dayButtons[day] = dayElement; // 参照を保持
+        } else {
+            // 4日以降は無効化
+            dayElement.classList.add('disabled');
+            dayButtons[day] = dayElement;
+        }
         
         calendarDays.appendChild(dayElement);
     }
@@ -97,18 +106,15 @@ function generateCalendar() {
 // ボタンの有効/無効状態を更新
 function updateButtonStates() {
     const now = new Date();
+    const commonLockTime = new Date('2025-11-05T07:00:00'); // 1～3日すべて11月5日7時まで
     
-    for (let day = 1; day <= 30; day++) {
+    // 1～3日のみ処理
+    for (let day = 1; day <= 3; day++) {
         const button = dayButtons[day];
         const unlockTime = unlockSchedule[day];
         
-        // 次の日の午前7時を計算（ロック時刻）
-        const lockTime = day < 30 
-            ? unlockSchedule[day + 1] 
-            : new Date('2025-12-01T07:00:00'); // 30日の場合は12月1日午前7時
-        
-        // 解放条件：解放時刻を過ぎている かつ ロック時刻前
-        if (now >= unlockTime && now < lockTime) {
+        // 解放条件：解放時刻を過ぎている かつ 11月5日7時前
+        if (now >= unlockTime && now < commonLockTime) {
             // 解放済み：ボタンを有効化
             button.classList.add('unlocked');
             button.classList.remove('locked');
@@ -174,14 +180,12 @@ function showConfirmPopup(message, onConfirm, onCancel) {
 // 音声を再生する関数
 function playAudio(day) {
     const button = dayButtons[day];
+    const commonLockTime = new Date('2025-11-05T07:00:00');
     
     // 未解放の場合は再生しない
     if (button.classList.contains('locked')) {
         const now = new Date();
         const unlockTime = unlockSchedule[day];
-        const lockTime = day < 30 
-            ? unlockSchedule[day + 1] 
-            : new Date('2025-12-01T07:00:00');
         
         let message;
         if (now < unlockTime) {
@@ -193,8 +197,8 @@ function playAudio(day) {
                 minute: '2-digit'
             });
             message = `この音声は ${timeString} に解放されます♡`;
-        } else if (now >= lockTime) {
-            // 期限切れ
+        } else if (now >= commonLockTime) {
+            // 期限切れ（11月5日7時以降）
             message = 'この音声の再生期限が過ぎました💦\n次の音声を楽しみにしていてね♡';
         }
         
@@ -207,7 +211,7 @@ function playAudio(day) {
     
     showConfirmPopup(message, () => {
         // OKが押された場合：音声を再生
-        const audioFileName = `声${day}.wav`;
+        const audioFileName = audioFileMapping[day] || `声${day}.wav`;
         const audio = new Audio(audioFileName);
         
         audio.play().catch(error => {
