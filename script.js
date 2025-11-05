@@ -129,11 +129,11 @@ function updateButtonStates() {
         if (day <= 3) {
             // 1～3日は11月5日7時まで
             lockTime = new Date('2025-11-05T07:00:00');
-        } else if (day === 4) {
-            // 4日は11月6日7時まで（特別対応）
-            lockTime = new Date('2025-11-06T07:00:00');
+        } else if (day === 4 || day === 5) {
+            // 4日と5日は11月7日7時まで（特別対応）
+            lockTime = new Date('2025-11-07T07:00:00');
         } else {
-            // 5日以降は次の日の7時まで
+            // 6日以降は次の日の7時まで
             lockTime = new Date(`2025-11-${String(day + 1).padStart(2, '0')}T07:00:00`);
         }
         
@@ -214,9 +214,9 @@ function playAudio(day) {
         let lockTime;
         if (day <= 3) {
             lockTime = new Date('2025-11-05T07:00:00');
-        } else if (day === 4) {
-            // 4日は11月6日7時まで（特別対応）
-            lockTime = new Date('2025-11-06T07:00:00');
+        } else if (day === 4 || day === 5) {
+            // 4日と5日は11月7日7時まで（特別対応）
+            lockTime = new Date('2025-11-07T07:00:00');
         } else {
             lockTime = new Date(`2025-11-${String(day + 1).padStart(2, '0')}T07:00:00`);
         }
