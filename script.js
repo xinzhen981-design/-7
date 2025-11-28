@@ -8,7 +8,17 @@ const unlockSchedule = {
     6: new Date('2025-11-06T07:00:00'),
     7: new Date('2025-11-07T07:00:00'),
     8: new Date('2025-11-08T07:00:00'),
-    9: new Date('2025-11-09T07:00:00')
+    9: new Date('2025-11-09T07:00:00'),
+    10: new Date('2025-11-10T07:00:00'),
+    11: new Date('2025-11-11T07:00:00'),
+    12: new Date('2025-11-12T07:00:00'),
+    13: new Date('2025-11-13T07:00:00'),
+    14: new Date('2025-11-14T07:00:00'),
+    15: new Date('2025-11-15T07:00:00'),
+    16: new Date('2025-11-16T07:00:00'),
+    17: new Date('2025-11-17T07:00:00'),
+    18: new Date('2025-11-18T07:00:00'),
+    19: new Date('2025-11-19T07:00:00')
 };
 
 // 音声ファイルのマッピング
@@ -21,7 +31,17 @@ const audioFileMapping = {
     6: '声11.wav',
     7: '声12.wav',
     8: '声13.wav',
-    9: '声14.wav'
+    9: '声14.wav',
+    10: '声15.wav',
+    11: '声16.wav',
+    12: '声17.wav',
+    13: '声18.wav',
+    14: '声19.wav',
+    15: '声20.wav',
+    16: '声21.wav',
+    17: '声22.wav',
+    18: '声23.wav',
+    19: '声24.wav'
 };
 
 // 各日付の確認メッセージ（朝用）
@@ -95,12 +115,12 @@ function generateCalendar() {
             dayElement.classList.add('weekday');
         }
         
-        // 1～9日にクリックイベントを追加
-        if (day >= 1 && day <= 9) {
+        // 1～19日にクリックイベントを追加
+        if (day >= 1 && day <= 19) {
             dayElement.addEventListener('click', () => playAudio(day));
             dayButtons[day] = dayElement; // 参照を保持
         } else {
-            // 10日以降は無効化
+            // 20日以降は無効化
             dayElement.classList.add('disabled');
             dayButtons[day] = dayElement;
         }
@@ -118,9 +138,10 @@ function generateCalendar() {
 // ボタンの有効/無効状態を更新
 function updateButtonStates() {
     const now = new Date();
+    const finalLockTime = new Date('2025-12-05T07:00:00'); // 10～19日は12月5日7時まで
     
-    // 1～9日を処理
-    for (let day = 1; day <= 9; day++) {
+    // 1～19日を処理
+    for (let day = 1; day <= 19; day++) {
         const button = dayButtons[day];
         const unlockTime = unlockSchedule[day];
         
@@ -130,11 +151,14 @@ function updateButtonStates() {
             // 1～3日は11月5日7時まで
             lockTime = new Date('2025-11-05T07:00:00');
         } else if (day === 4 || day === 5) {
-            // 4日と5日は11月7日7時まで（特別対応）
+            // 4日と5日は11月7日7時まで
             lockTime = new Date('2025-11-07T07:00:00');
-        } else {
-            // 6日以降は次の日の7時まで
+        } else if (day >= 6 && day <= 9) {
+            // 6～9日は次の日の7時まで
             lockTime = new Date(`2025-11-${String(day + 1).padStart(2, '0')}T07:00:00`);
+        } else {
+            // 10～19日は12月5日7時まで
+            lockTime = finalLockTime;
         }
         
         // 解放条件：解放時刻を過ぎている かつ ロック時刻前
@@ -204,6 +228,7 @@ function showConfirmPopup(message, onConfirm, onCancel) {
 // 音声を再生する関数
 function playAudio(day) {
     const button = dayButtons[day];
+    const finalLockTime = new Date('2025-12-05T07:00:00');
     
     // 未解放の場合は再生しない
     if (button.classList.contains('locked')) {
@@ -215,10 +240,12 @@ function playAudio(day) {
         if (day <= 3) {
             lockTime = new Date('2025-11-05T07:00:00');
         } else if (day === 4 || day === 5) {
-            // 4日と5日は11月7日7時まで（特別対応）
             lockTime = new Date('2025-11-07T07:00:00');
-        } else {
+        } else if (day >= 6 && day <= 9) {
             lockTime = new Date(`2025-11-${String(day + 1).padStart(2, '0')}T07:00:00`);
+        } else {
+            // 10～19日は12月5日7時まで
+            lockTime = finalLockTime;
         }
         
         let message;
