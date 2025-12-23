@@ -1139,6 +1139,60 @@
             color: var(--pink-dark);
             line-height: 1.5;
         }
+
+        /* 暗転画面 */
+        .blackout-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 250;
+            opacity: 0;
+        }
+
+        .blackout-screen.active {
+            display: flex;
+        }
+
+        .blackout-screen.fade-in {
+            animation: fadeToBlack 1.5s ease-out forwards;
+        }
+
+        @keyframes fadeToBlack {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .countdown-text {
+            font-size: 8rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 215, 0, 0.5);
+            opacity: 0;
+        }
+
+        .countdown-text.show {
+            animation: countdownPop 0.8s ease-out forwards;
+        }
+
+        @keyframes countdownPop {
+            0% { opacity: 0; transform: scale(2); }
+            50% { opacity: 1; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .countdown-text.fade {
+            animation: countdownFade 0.2s ease-out forwards;
+        }
+
+        @keyframes countdownFade {
+            to { opacity: 0; transform: scale(0.5); }
+        }
     </style>
 </head>
 <body>
@@ -1220,6 +1274,11 @@
         </div>
     </div>
 
+    <!-- 暗転・カウントダウン画面 -->
+    <div class="blackout-screen" id="blackoutScreen">
+        <div class="countdown-text" id="countdownText">5</div>
+    </div>
+
     <!-- カプセル演出画面 -->
     <div class="capsule-screen" id="capsuleScreen">
         <div class="capsule" id="capsule">
@@ -1298,7 +1357,7 @@
             </div>
         </div>
         <div class="hint-text" id="hintText">↓押したら良いことがあるかも🫢</div>
-        <button class="retry-button" id="retryButton" onclick="resetGacha()">もう一回チャンスがあります…！</button>
+        <button class="retry-button" id="retryButton" onclick="window.location.href='https://note.com/preview/n3faac9e4fa8f?prev_access_key=35e99013787d712926eaad9b14b23891'">もう一回チャンスがあります…！</button>
     </div>
 
     <script>
@@ -1372,22 +1431,106 @@
                 capsule.classList.add('shake');
             }, 2200);
             
-            // カプセルが光り輝く
+            // カプセルが開く（パカーン）
             setTimeout(() => {
                 capsule.classList.remove('shake');
-                capsule.classList.add('glow');
+                capsuleTop.classList.add('open');
             }, 4200);
             
-            // カプセルが開く
+            // 暗転開始
             setTimeout(() => {
-                capsuleTop.classList.add('open');
-            }, 4800);
+                startBlackout();
+            }, 5200);
+        }
+
+        // 暗転とカウントダウン
+        function startBlackout() {
+            const capsuleScreen = document.getElementById('capsuleScreen');
+            const blackoutScreen = document.getElementById('blackoutScreen');
+            const countdownText = document.getElementById('countdownText');
             
-            // 光り輝く画像演出へ
+            // 暗転画面を表示してフェードイン
+            blackoutScreen.classList.add('active');
+            blackoutScreen.classList.add('fade-in');
+            
+            // カプセル画面を非表示
             setTimeout(() => {
                 capsuleScreen.classList.remove('active');
-                showReveal();
-            }, 5800);
+            }, 1500);
+            
+            // カウントダウン開始
+            const numbers = ['5', '4', '3', '2', '1', '0'];
+            let index = 0;
+            
+            setTimeout(() => {
+                function showNumber() {
+                    if (index < numbers.length) {
+                        countdownText.textContent = numbers[index];
+                        countdownText.className = 'countdown-text show';
+                        
+                        setTimeout(() => {
+                            countdownText.classList.remove('show');
+                            countdownText.classList.add('fade');
+                            
+                            setTimeout(() => {
+                                index++;
+                                if (index < numbers.length) {
+                                    showNumber();
+                                } else {
+                                    // カウントダウン終了、結果表示へ
+                                    setTimeout(() => {
+                                        blackoutScreen.classList.remove('active', 'fade-in');
+                                        blackoutScreen.style.opacity = '0';
+                                        // ガチャ完了を保存
+                                        saveGachaPlayed();
+                                        showReveal();
+                                    }, 500);
+                                }
+                            }, 300);
+                        }, 1000);
+                    }
+                }
+                showNumber();
+            }, 2000);
+        }
+
+        // ガチャを引いたかチェック（1日1回制限）
+        function hasPlayedToday() {
+            const lastPlayed = localStorage.getItem('mikaGachaLastPlayed');
+            if (!lastPlayed) return false;
+            
+            const today = new Date().toDateString();
+            return lastPlayed === today;
+        }
+
+        // ガチャ完了を保存
+        function saveGachaPlayed() {
+            const today = new Date().toDateString();
+            localStorage.setItem('mikaGachaLastPlayed', today);
+        }
+
+        // ページ読み込み時にチェック
+        function checkGachaStatus() {
+            if (hasPlayedToday()) {
+                // すでに引いている場合、結果画面を直接表示
+                showResultDirectly();
+            }
+        }
+
+        // 直接「もう一度チャンスがあります」画面を表示
+        function showResultDirectly() {
+            document.getElementById('mainScreen').style.display = 'none';
+            
+            // 虹色ガチャ画面を直接表示
+            const rainbowScreen = document.getElementById('rainbowScreen');
+            const luxuryGacha = document.getElementById('luxuryGacha');
+            const hintText = document.getElementById('hintText');
+            const retryButton = document.getElementById('retryButton');
+            
+            rainbowScreen.classList.add('active');
+            luxuryGacha.classList.add('show');
+            hintText.classList.add('show');
+            retryButton.classList.add('show');
         }
 
         // 光り輝く画像演出
@@ -1509,6 +1652,9 @@
 
         // 初期化
         createSnowflakes();
+        
+        // ページ読み込み時にガチャ状態をチェック
+        window.addEventListener('load', checkGachaStatus);
     </script>
 </body>
 </html>
