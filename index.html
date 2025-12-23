@@ -88,11 +88,40 @@
         }
 
         /* ガチャマシン */
+        .gacha-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px auto;
+        }
+
+        .side-text {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--pink-dark);
+            writing-mode: vertical-rl;
+            text-shadow: 1px 1px 0 var(--white);
+            animation: sideTextBounce 1s ease-in-out infinite alternate;
+        }
+
+        .side-text.left {
+            animation-delay: 0s;
+        }
+
+        .side-text.right {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes sideTextBounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-8px); }
+        }
+
         .gacha-machine {
             position: relative;
             width: 280px;
             height: 400px;
-            margin: 20px auto;
         }
 
         .gacha-top {
@@ -1151,25 +1180,29 @@
             </div>
         </div>
 
-        <div class="gacha-machine">
-            <div class="gacha-top"></div>
-            <div class="gacha-globe">
-                <div class="gacha-balls">
-                    <div class="mini-ball"></div>
-                    <div class="mini-ball"></div>
-                    <div class="mini-ball"></div>
-                    <div class="mini-ball"></div>
-                    <div class="mini-ball"></div>
-                    <div class="mini-ball"></div>
-                    <div class="mini-ball"></div>
-                    <div class="mini-ball"></div>
+        <div class="gacha-wrapper">
+            <div class="side-text left">下に下がって♡</div>
+            <div class="gacha-machine">
+                <div class="gacha-top"></div>
+                <div class="gacha-globe">
+                    <div class="gacha-balls">
+                        <div class="mini-ball"></div>
+                        <div class="mini-ball"></div>
+                        <div class="mini-ball"></div>
+                        <div class="mini-ball"></div>
+                        <div class="mini-ball"></div>
+                        <div class="mini-ball"></div>
+                        <div class="mini-ball"></div>
+                        <div class="mini-ball"></div>
+                    </div>
                 </div>
+                <div class="gacha-body">
+                    <div class="gacha-handle"></div>
+                    <div class="gacha-dispenser"></div>
+                </div>
+                <div class="gacha-feet"></div>
             </div>
-            <div class="gacha-body">
-                <div class="gacha-handle"></div>
-                <div class="gacha-dispenser"></div>
-            </div>
-            <div class="gacha-feet"></div>
+            <div class="side-text right">下に下がって♡</div>
         </div>
 
         <button class="spin-button" onclick="showConfirmModal()">1回回す</button>
