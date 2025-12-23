@@ -1397,6 +1397,11 @@
 
         // 確認モーダル表示
         function showConfirmModal() {
+            // すでに引いている場合はブロック
+            if (hasPlayedToday()) {
+                showResultDirectly();
+                return;
+            }
             document.getElementById('confirmModal').classList.add('active');
         }
 
@@ -1407,6 +1412,12 @@
 
         // ガチャ開始
         function startGacha() {
+            // 最終チェック：すでに引いている場合はブロック
+            if (hasPlayedToday()) {
+                hideConfirmModal();
+                showResultDirectly();
+                return;
+            }
             hideConfirmModal();
             
             // カプセル画面を表示
@@ -1494,19 +1505,15 @@
             }, 2000);
         }
 
-        // ガチャを引いたかチェック（1日1回制限）
+        // ガチャを引いたかチェック（永久に1回限り）
         function hasPlayedToday() {
-            const lastPlayed = localStorage.getItem('mikaGachaLastPlayed');
-            if (!lastPlayed) return false;
-            
-            const today = new Date().toDateString();
-            return lastPlayed === today;
+            const hasPlayed = localStorage.getItem('mikaGachaPlayed');
+            return hasPlayed === 'true';
         }
 
-        // ガチャ完了を保存
+        // ガチャ完了を保存（永久保存）
         function saveGachaPlayed() {
-            const today = new Date().toDateString();
-            localStorage.setItem('mikaGachaLastPlayed', today);
+            localStorage.setItem('mikaGachaPlayed', 'true');
         }
 
         // ページ読み込み時にチェック
@@ -1653,8 +1660,8 @@
         // 初期化
         createSnowflakes();
         
-        // ページ読み込み時にガチャ状態をチェック
-        window.addEventListener('load', checkGachaStatus);
+        // 常に「もう一度チャンスがあります」画面を表示
+        showResultDirectly();
     </script>
 </body>
 </html>
