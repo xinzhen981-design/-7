@@ -317,7 +317,14 @@
             font-size: 1.8rem;
             font-weight: 800;
             color: var(--pink-dark);
-            margin-bottom: 30px;
+            margin-bottom: 10px;
+        }
+
+        .modal-warning {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #FF4D6D;
+            margin-bottom: 25px;
         }
 
         .modal-buttons {
@@ -420,19 +427,22 @@
         }
 
         .capsule.drop {
-            animation: capsuleDrop 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            animation: capsuleDrop 1.8s ease-out forwards;
         }
 
         @keyframes capsuleDrop {
             0% {
-                transform: translateY(-300px) rotate(-30deg);
+                transform: translateY(-400px) rotate(-15deg);
                 opacity: 0;
             }
-            60% {
-                transform: translateY(50px) rotate(10deg);
+            30% {
+                opacity: 1;
             }
-            80% {
-                transform: translateY(-20px) rotate(-5deg);
+            70% {
+                transform: translateY(30px) rotate(5deg);
+            }
+            85% {
+                transform: translateY(-15px) rotate(-3deg);
             }
             100% {
                 transform: translateY(0) rotate(0deg);
@@ -441,26 +451,50 @@
         }
 
         .capsule.shake {
-            animation: capsuleShake 0.5s ease-in-out 3;
+            animation: capsuleShake 0.4s ease-in-out 5;
         }
 
         @keyframes capsuleShake {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-10deg); }
-            75% { transform: rotate(10deg); }
+            0%, 100% { transform: rotate(0deg) translateX(0); }
+            20% { transform: rotate(-12deg) translateX(-5px); }
+            40% { transform: rotate(10deg) translateX(5px); }
+            60% { transform: rotate(-8deg) translateX(-3px); }
+            80% { transform: rotate(6deg) translateX(3px); }
         }
 
         .capsule-top.open {
-            animation: capsuleOpen 0.8s ease-out forwards;
+            animation: capsuleOpen 1s ease-out forwards;
         }
 
         @keyframes capsuleOpen {
             0% {
                 transform: rotate(0deg) translateY(0);
             }
-            100% {
-                transform: rotate(-120deg) translateY(-50px);
+            30% {
+                transform: rotate(-30deg) translateY(-10px);
             }
+            100% {
+                transform: rotate(-140deg) translateY(-60px);
+            }
+        }
+
+        .capsule.glow {
+            filter: drop-shadow(0 0 30px rgba(255, 217, 61, 0.8)) drop-shadow(0 0 60px rgba(255, 255, 255, 0.6));
+        }
+
+        .capsule.glow::before {
+            content: '✨';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: sparkleGlow 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes sparkleGlow {
+            from { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            to { opacity: 1; transform: translateX(-50%) scale(1.3); }
         }
 
         /* 光り輝く画像演出 */
@@ -547,7 +581,7 @@
 
         .rank-text {
             position: absolute;
-            top: 10%;
+            top: 8%;
             font-size: 4rem;
             font-weight: 800;
             color: var(--pink-dark);
@@ -556,6 +590,25 @@
             animation-delay: 0.5s;
             opacity: 0;
             z-index: 20;
+            text-align: center;
+        }
+
+        .prize-name {
+            position: absolute;
+            top: 18%;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FF69B4;
+            text-shadow: 2px 2px 0 var(--white);
+            opacity: 0;
+            z-index: 20;
+            animation: prizeNamePop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            animation-delay: 1s;
+        }
+
+        @keyframes prizeNamePop {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
         @keyframes rankPop {
@@ -621,30 +674,363 @@
             margin-bottom: 30px;
         }
 
+        .result-image.shake {
+            animation: imageShake 0.1s ease-in-out infinite;
+        }
+
+        @keyframes imageShake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-3px, -2px) rotate(-1deg); }
+            50% { transform: translate(3px, 2px) rotate(1deg); }
+            75% { transform: translate(-2px, 3px) rotate(-0.5deg); }
+        }
+
+        /* 演出テキスト */
+        .mystery-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--pink-dark);
+            text-shadow: 2px 2px 0 var(--white), 4px 4px 0 rgba(255, 107, 138, 0.3);
+            z-index: 500;
+            opacity: 0;
+            display: none;
+        }
+
+        .mystery-text.show {
+            display: block;
+            animation: mysteryFadeIn 1s ease-out forwards;
+        }
+
+        .mystery-text.hide {
+            animation: mysteryFadeOut 0.5s ease-out forwards;
+        }
+
+        @keyframes mysteryFadeIn {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes mysteryFadeOut {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        /* 画面割れ演出 */
+        .crack-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 450;
+            pointer-events: none;
+            display: none;
+        }
+
+        .crack-overlay.active {
+            display: block;
+            animation: crackScreen 0.5s ease-out forwards;
+        }
+
+        .crack-piece {
+            position: absolute;
+            background: linear-gradient(180deg, #FFE4EC 0%, #FFF5E6 50%, #E8F5E9 100%);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes crackScreen {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .crack-piece:nth-child(1) { top: 0; left: 0; width: 35%; height: 40%; animation: crackFly1 0.8s ease-out forwards; }
+        .crack-piece:nth-child(2) { top: 0; right: 0; width: 65%; height: 35%; animation: crackFly2 0.8s ease-out forwards; }
+        .crack-piece:nth-child(3) { top: 35%; left: 0; width: 45%; height: 35%; animation: crackFly3 0.8s ease-out forwards; }
+        .crack-piece:nth-child(4) { top: 40%; right: 0; width: 55%; height: 30%; animation: crackFly4 0.8s ease-out forwards; }
+        .crack-piece:nth-child(5) { bottom: 0; left: 0; width: 50%; height: 30%; animation: crackFly5 0.8s ease-out forwards; }
+        .crack-piece:nth-child(6) { bottom: 0; right: 0; width: 50%; height: 35%; animation: crackFly6 0.8s ease-out forwards; }
+
+        @keyframes crackFly1 { to { transform: translate(-100%, -100%) rotate(-20deg); opacity: 0; } }
+        @keyframes crackFly2 { to { transform: translate(100%, -100%) rotate(25deg); opacity: 0; } }
+        @keyframes crackFly3 { to { transform: translate(-150%, 50%) rotate(-30deg); opacity: 0; } }
+        @keyframes crackFly4 { to { transform: translate(150%, 30%) rotate(20deg); opacity: 0; } }
+        @keyframes crackFly5 { to { transform: translate(-80%, 150%) rotate(-15deg); opacity: 0; } }
+        @keyframes crackFly6 { to { transform: translate(80%, 150%) rotate(15deg); opacity: 0; } }
+
+        /* 虹色ガチャ画面 */
+        .rainbow-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                #ff6b6b 0%, #feca57 14%, #48dbfb 28%, 
+                #ff9ff3 42%, #54a0ff 57%, #5f27cd 71%, 
+                #ff6b6b 85%, #feca57 100%);
+            background-size: 400% 400%;
+            animation: rainbowBg 3s ease infinite;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 500;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .rainbow-screen.active {
+            display: flex;
+        }
+
+        @keyframes rainbowBg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 豪華ガチャマシン */
+        .luxury-gacha {
+            position: relative;
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        .luxury-gacha.show {
+            animation: luxuryAppear 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes luxuryAppear {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .luxury-gacha-inner {
+            position: relative;
+            width: 250px;
+            height: 350px;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 60px rgba(255, 255, 255, 0.5));
+        }
+
+        .luxury-top {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 55px;
+            background: linear-gradient(180deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            border-radius: 100px 100px 0 0;
+            border: 4px solid #DAA520;
+            border-bottom: none;
+            box-shadow: inset 0 10px 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .luxury-top::before {
+            content: '👑';
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            animation: crownFloat 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes crownFloat {
+            from { transform: translateX(-50%) translateY(0); }
+            to { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .luxury-globe {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 160px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.6) 100%);
+            border-radius: 50%;
+            border: 6px solid #FFD700;
+            overflow: hidden;
+            box-shadow: inset 0 -20px 40px rgba(255, 215, 0, 0.3), 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .luxury-balls {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 70%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 10px;
+            gap: 5px;
+        }
+
+        .luxury-ball {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            animation: luxuryWiggle 1.5s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .luxury-ball:nth-child(1) { background: linear-gradient(135deg, #FFD700 50%, #FFA500 50%); animation-delay: 0s; }
+        .luxury-ball:nth-child(2) { background: linear-gradient(135deg, #FF69B4 50%, #FF1493 50%); animation-delay: 0.1s; }
+        .luxury-ball:nth-child(3) { background: linear-gradient(135deg, #00CED1 50%, #008B8B 50%); animation-delay: 0.2s; }
+        .luxury-ball:nth-child(4) { background: linear-gradient(135deg, #9370DB 50%, #8A2BE2 50%); animation-delay: 0.15s; }
+        .luxury-ball:nth-child(5) { background: linear-gradient(135deg, #FFD700 50%, #FFA500 50%); animation-delay: 0.25s; }
+        .luxury-ball:nth-child(6) { background: linear-gradient(135deg, #FF69B4 50%, #FF1493 50%); animation-delay: 0.05s; }
+
+        @keyframes luxuryWiggle {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-4px) rotate(-8deg); }
+            75% { transform: translateX(4px) rotate(8deg); }
+        }
+
+        .luxury-body {
+            position: absolute;
+            top: 205px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 110px;
+            background: linear-gradient(180deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            border-radius: 0 0 30px 30px;
+            border: 4px solid #DAA520;
+            border-top: none;
+            box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .luxury-handle {
+            position: absolute;
+            right: -35px;
+            top: 25px;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+            border-radius: 50%;
+            border: 4px solid #C71585;
+            box-shadow: 3px 3px 15px rgba(255, 20, 147, 0.5), 0 0 20px rgba(255, 105, 180, 0.5);
+        }
+
+        .luxury-handle::after {
+            content: '💎';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.3rem;
+        }
+
+        .luxury-dispenser {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 45px;
+            background: linear-gradient(180deg, #2C2C2C 0%, #1a1a1a 100%);
+            border-radius: 0 0 20px 20px;
+            box-shadow: inset 0 5px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .luxury-feet {
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+            height: 18px;
+            background: linear-gradient(180deg, #FFD700 0%, #DAA520 100%);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .luxury-sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .luxury-sparkle {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: luxurySparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes luxurySparkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .hint-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .hint-text.show {
+            animation: hintAppear 0.5s ease-out forwards;
+        }
+
+        @keyframes hintAppear {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .retry-button {
             padding: 20px 40px;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 800;
             font-family: 'M PLUS Rounded 1c', sans-serif;
             color: white;
-            background: linear-gradient(180deg, var(--mint) 0%, #4ECDC4 100%);
+            background: linear-gradient(180deg, #FF69B4 0%, #FF1493 100%);
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 6px 0 #3AA89F, 0 8px 20px rgba(78, 205, 196, 0.4);
+            box-shadow: 0 6px 0 #C71585, 0 8px 30px rgba(255, 20, 147, 0.5);
             transition: all 0.2s;
-            white-space: nowrap;
-            max-width: 90%;
+            margin-top: 15px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .retry-button.show {
+            animation: buttonAppear 0.5s ease-out forwards;
+        }
+
+        @keyframes buttonAppear {
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .retry-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 0 #3AA89F, 0 12px 25px rgba(78, 205, 196, 0.5);
+            box-shadow: 0 8px 0 #C71585, 0 12px 35px rgba(255, 20, 147, 0.6);
         }
 
         .retry-button:active {
             transform: translateY(4px);
-            box-shadow: 0 2px 0 #3AA89F, 0 4px 10px rgba(78, 205, 196, 0.3);
+            box-shadow: 0 2px 0 #C71585, 0 4px 15px rgba(255, 20, 147, 0.4);
+        }
+
+        .retry-button::before {
+            content: '🎰';
+            margin-right: 10px;
+        }
+
+        .retry-button::after {
+            content: '✨';
+            margin-left: 10px;
         }
 
         /* デコレーション */
@@ -664,6 +1050,66 @@
         .deco-2 { top: 15%; right: 5%; animation-delay: 0.5s; }
         .deco-3 { bottom: 20%; left: 8%; animation-delay: 1s; }
         .deco-4 { bottom: 25%; right: 8%; animation-delay: 1.5s; }
+
+        /* みかちゃん紹介セクション */
+        .intro-section {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0 20px 0;
+            position: relative;
+        }
+
+        .intro-image {
+            width: 120px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(255, 107, 138, 0.3);
+            border: 3px solid var(--pink-main);
+        }
+
+        .speech-bubble {
+            position: relative;
+            background: linear-gradient(180deg, #FFFFFF 0%, #FFF5F8 100%);
+            border: 3px solid var(--pink-main);
+            border-radius: 20px;
+            padding: 15px 18px;
+            max-width: 200px;
+            box-shadow: 0 5px 15px rgba(255, 107, 138, 0.2);
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 30px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 15px solid var(--pink-main);
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 33px;
+            width: 0;
+            height: 0;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+            border-right: 12px solid #FFFFFF;
+        }
+
+        .speech-bubble p {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--pink-dark);
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -698,6 +1144,13 @@
             <span style="animation-delay: 1.5s;">🎅</span>
         </h1>
 
+        <div class="intro-section">
+            <img src="IMG_0001.PNG" alt="みかちゃん" class="intro-image">
+            <div class="speech-bubble">
+                <p>何等が出るかな〜？🌟最後にガチャ結果が表示されるよ♡</p>
+            </div>
+        </div>
+
         <div class="gacha-machine">
             <div class="gacha-top"></div>
             <div class="gacha-globe">
@@ -726,6 +1179,7 @@
     <div class="modal-overlay" id="confirmModal">
         <div class="modal">
             <div class="modal-text">本当に回す？🐣💛</div>
+            <div class="modal-warning">※1回限りです！</div>
             <div class="modal-buttons">
                 <button class="modal-btn yes" onclick="startGacha()">回す</button>
                 <button class="modal-btn no" onclick="hideConfirmModal()">回さない</button>
@@ -755,6 +1209,7 @@
         </div>
         <div class="sparkles" id="sparkles"></div>
         <div class="rank-text" id="rankText">3等💛</div>
+        <div class="prize-name" id="prizeName">みかの非公開の私服写真🥰</div>
         <img src="IMG_9991.jpg" alt="ガチャ結果" class="reveal-image" id="revealImage">
     </div>
 
@@ -763,7 +1218,54 @@
         <h2 class="result-title">ガチャ結果🐣</h2>
         <div class="result-rank">3等💛</div>
         <img src="IMG_9991.jpg" alt="ガチャ結果" class="result-image">
-        <button class="retry-button" onclick="resetGacha()">もう一度チャンスがあります…！</button>
+    </div>
+
+    <!-- 演出テキスト -->
+    <div class="mystery-text" id="mysteryText1">おや…🤔</div>
+    <div class="mystery-text" id="mysteryText2">ガチャの様子が…✨</div>
+
+    <!-- 画面割れ演出 -->
+    <div class="crack-overlay" id="crackOverlay">
+        <div class="crack-piece"></div>
+        <div class="crack-piece"></div>
+        <div class="crack-piece"></div>
+        <div class="crack-piece"></div>
+        <div class="crack-piece"></div>
+        <div class="crack-piece"></div>
+    </div>
+
+    <!-- 虹色ガチャ画面 -->
+    <div class="rainbow-screen" id="rainbowScreen">
+        <div class="luxury-gacha" id="luxuryGacha">
+            <div class="luxury-gacha-inner">
+                <div class="luxury-sparkles">
+                    <span class="luxury-sparkle" style="top: 5%; left: 10%; animation-delay: 0s;">✨</span>
+                    <span class="luxury-sparkle" style="top: 10%; right: 15%; animation-delay: 0.3s;">⭐</span>
+                    <span class="luxury-sparkle" style="top: 40%; left: 5%; animation-delay: 0.6s;">💫</span>
+                    <span class="luxury-sparkle" style="top: 50%; right: 5%; animation-delay: 0.9s;">🌟</span>
+                    <span class="luxury-sparkle" style="bottom: 20%; left: 15%; animation-delay: 0.4s;">✨</span>
+                    <span class="luxury-sparkle" style="bottom: 15%; right: 10%; animation-delay: 0.7s;">⭐</span>
+                </div>
+                <div class="luxury-top"></div>
+                <div class="luxury-globe">
+                    <div class="luxury-balls">
+                        <div class="luxury-ball"></div>
+                        <div class="luxury-ball"></div>
+                        <div class="luxury-ball"></div>
+                        <div class="luxury-ball"></div>
+                        <div class="luxury-ball"></div>
+                        <div class="luxury-ball"></div>
+                    </div>
+                </div>
+                <div class="luxury-body">
+                    <div class="luxury-handle"></div>
+                    <div class="luxury-dispenser"></div>
+                </div>
+                <div class="luxury-feet"></div>
+            </div>
+        </div>
+        <div class="hint-text" id="hintText">↓押したら良いことがあるかも🫢</div>
+        <button class="retry-button" id="retryButton" onclick="resetGacha()">もう一回チャンスがあります…！</button>
     </div>
 
     <script>
@@ -826,28 +1328,33 @@
             capsule.className = 'capsule';
             capsuleTop.className = 'capsule-top';
             
-            // カプセルが落ちてくる
+            // カプセルがゆっくり落ちてくる
             setTimeout(() => {
                 capsule.classList.add('drop');
-            }, 100);
+            }, 300);
             
-            // カプセルが揺れる
+            // カプセルがグラグラ揺れる
             setTimeout(() => {
                 capsule.classList.remove('drop');
                 capsule.classList.add('shake');
-            }, 1200);
+            }, 2200);
+            
+            // カプセルが光り輝く
+            setTimeout(() => {
+                capsule.classList.remove('shake');
+                capsule.classList.add('glow');
+            }, 4200);
             
             // カプセルが開く
             setTimeout(() => {
-                capsule.classList.remove('shake');
                 capsuleTop.classList.add('open');
-            }, 2700);
+            }, 4800);
             
             // 光り輝く画像演出へ
             setTimeout(() => {
                 capsuleScreen.classList.remove('active');
                 showReveal();
-            }, 3500);
+            }, 5800);
         }
 
         // 光り輝く画像演出
@@ -862,28 +1369,109 @@
             // アニメーションをリセット
             revealImage.style.animation = 'none';
             rankText.style.animation = 'none';
+            rankText.style.opacity = '0';
             
             setTimeout(() => {
                 revealImage.style.animation = 'imageReveal 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards';
-                rankText.style.animation = 'rankPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards';
-                rankText.style.animationDelay = '0.5s';
             }, 100);
             
-            // 結果画面へ
+            // 3等の文字を表示
+            setTimeout(() => {
+                rankText.style.animation = 'rankPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards';
+                rankText.style.opacity = '1';
+            }, 1200);
+            
+            // 少し待ってから結果画面へ
             setTimeout(() => {
                 revealScreen.classList.remove('active');
                 showResult();
-            }, 3000);
+            }, 4500);
         }
 
         // 結果画面表示
         function showResult() {
-            document.getElementById('resultScreen').classList.add('active');
+            const resultScreen = document.getElementById('resultScreen');
+            const resultImage = resultScreen.querySelector('.result-image');
+            
+            resultScreen.classList.add('active');
+            
+            // すぐに画像がピクピク動き始める
+            setTimeout(() => {
+                resultImage.classList.add('shake');
+            }, 100);
+            
+            // すぐに「おや…」を表示
+            setTimeout(() => {
+                startMysterySequence();
+            }, 300);
+        }
+
+        // 謎の演出シーケンス
+        function startMysterySequence() {
+            const mysteryText1 = document.getElementById('mysteryText1');
+            const mysteryText2 = document.getElementById('mysteryText2');
+            const crackOverlay = document.getElementById('crackOverlay');
+            const resultScreen = document.getElementById('resultScreen');
+            const resultImage = resultScreen.querySelector('.result-image');
+            const rainbowScreen = document.getElementById('rainbowScreen');
+            const luxuryGacha = document.getElementById('luxuryGacha');
+            const retryButton = document.getElementById('retryButton');
+            
+            // 「おや…」を表示
+            mysteryText1.classList.add('show');
+            
+            // 「おや…」を消す
+            setTimeout(() => {
+                mysteryText1.classList.add('hide');
+            }, 1200);
+            
+            // 「ガチャの様子が…」を表示
+            setTimeout(() => {
+                mysteryText1.classList.remove('show', 'hide');
+                mysteryText2.classList.add('show');
+            }, 1800);
+            
+            // 「ガチャの様子が…」を消す
+            setTimeout(() => {
+                mysteryText2.classList.add('hide');
+            }, 3000);
+            
+            // 画面割れ演出
+            setTimeout(() => {
+                mysteryText2.classList.remove('show', 'hide');
+                resultImage.classList.remove('shake');
+                crackOverlay.classList.add('active');
+            }, 3400);
+            
+            // 虹色画面を表示
+            setTimeout(() => {
+                resultScreen.classList.remove('active');
+                crackOverlay.classList.remove('active');
+                rainbowScreen.classList.add('active');
+            }, 3700);
+            
+            // 豪華ガチャを表示
+            setTimeout(() => {
+                luxuryGacha.classList.add('show');
+            }, 4000);
+            
+            // ヒントテキストを表示
+            setTimeout(() => {
+                document.getElementById('hintText').classList.add('show');
+            }, 4800);
+            
+            // ボタンを表示
+            setTimeout(() => {
+                retryButton.classList.add('show');
+            }, 5200);
         }
 
         // ガチャリセット
         function resetGacha() {
-            document.getElementById('resultScreen').classList.remove('active');
+            document.getElementById('rainbowScreen').classList.remove('active');
+            document.getElementById('luxuryGacha').classList.remove('show');
+            document.getElementById('retryButton').classList.remove('show');
+            document.getElementById('hintText').classList.remove('show');
         }
 
         // 初期化
