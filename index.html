@@ -3,52 +3,892 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2025年11月カレンダー</title>
-    <link rel="stylesheet" href="style.css">
+    <title>みかちゃんのクリスマスガチャ🎄</title>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink-light: #FFE4EC;
+            --pink-main: #FF9EB5;
+            --pink-dark: #FF6B8A;
+            --yellow-light: #FFF8DC;
+            --yellow-main: #FFD93D;
+            --mint: #98E4D0;
+            --white: #FFFFFF;
+            --cream: #FFF5E6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #FFE4EC 0%, #FFF5E6 50%, #E8F5E9 100%);
+            overflow-x: hidden;
+        }
+
+        /* 雪のアニメーション */
+        .snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -20px;
+            color: white;
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: fall linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--pink-dark);
+            text-shadow: 2px 2px 0 var(--white), 4px 4px 0 rgba(255, 107, 138, 0.3);
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .title span {
+            display: inline-block;
+            animation: bounce 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-5px); }
+        }
+
+        /* ガチャマシン */
+        .gacha-machine {
+            position: relative;
+            width: 280px;
+            height: 400px;
+            margin: 20px auto;
+        }
+
+        .gacha-top {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 60px;
+            background: linear-gradient(180deg, #FF9EB5 0%, #FF6B8A 100%);
+            border-radius: 100px 100px 0 0;
+            border: 4px solid var(--pink-dark);
+            border-bottom: none;
+        }
+
+        .gacha-top::before {
+            content: '🎄';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+        }
+
+        .gacha-globe {
+            position: absolute;
+            top: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 180px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.4) 100%);
+            border-radius: 50%;
+            border: 6px solid var(--pink-main);
+            overflow: hidden;
+            box-shadow: inset 0 -20px 40px rgba(255, 158, 181, 0.3);
+        }
+
+        .gacha-balls {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 70%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 10px;
+            gap: 5px;
+        }
+
+        .mini-ball {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        .mini-ball:nth-child(1) { background: linear-gradient(135deg, #FF6B8A 50%, #FF4D6D 50%); animation-delay: 0s; }
+        .mini-ball:nth-child(2) { background: linear-gradient(135deg, #FFD93D 50%, #FFC107 50%); animation-delay: 0.2s; }
+        .mini-ball:nth-child(3) { background: linear-gradient(135deg, #98E4D0 50%, #4ECDC4 50%); animation-delay: 0.4s; }
+        .mini-ball:nth-child(4) { background: linear-gradient(135deg, #A78BFA 50%, #8B5CF6 50%); animation-delay: 0.1s; }
+        .mini-ball:nth-child(5) { background: linear-gradient(135deg, #FF9EB5 50%, #FF6B8A 50%); animation-delay: 0.3s; }
+        .mini-ball:nth-child(6) { background: linear-gradient(135deg, #87CEEB 50%, #5DADE2 50%); animation-delay: 0.5s; }
+        .mini-ball:nth-child(7) { background: linear-gradient(135deg, #FFD93D 50%, #FFC107 50%); animation-delay: 0.15s; }
+        .mini-ball:nth-child(8) { background: linear-gradient(135deg, #FF6B8A 50%, #FF4D6D 50%); animation-delay: 0.35s; }
+
+        @keyframes wiggle {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-3px) rotate(-5deg); }
+            75% { transform: translateX(3px) rotate(5deg); }
+        }
+
+        .gacha-body {
+            position: absolute;
+            top: 230px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+            height: 130px;
+            background: linear-gradient(180deg, var(--pink-main) 0%, var(--pink-dark) 100%);
+            border-radius: 0 0 30px 30px;
+            border: 4px solid var(--pink-dark);
+            border-top: none;
+        }
+
+        .gacha-handle {
+            position: absolute;
+            right: -40px;
+            top: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--yellow-main) 0%, #FFA500 100%);
+            border-radius: 50%;
+            border: 4px solid #E6A100;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .gacha-handle::after {
+            content: '⭐';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+        }
+
+        .gacha-dispenser {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 50px;
+            background: linear-gradient(180deg, #333 0%, #1a1a1a 100%);
+            border-radius: 0 0 20px 20px;
+        }
+
+        .gacha-dispenser::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 20px;
+            background: #444;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .gacha-feet {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 20px;
+            background: linear-gradient(180deg, var(--pink-dark) 0%, #E5556A 100%);
+            border-radius: 10px;
+        }
+
+        /* 1回回すボタン */
+        .spin-button {
+            margin-top: 30px;
+            padding: 18px 50px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            color: white;
+            background: linear-gradient(180deg, var(--pink-main) 0%, var(--pink-dark) 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #D44D6A, 0 8px 20px rgba(255, 107, 138, 0.4);
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spin-button::before {
+            content: '🎁';
+            margin-right: 10px;
+        }
+
+        .spin-button::after {
+            content: '✨';
+            margin-left: 10px;
+        }
+
+        .spin-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #D44D6A, 0 12px 25px rgba(255, 107, 138, 0.5);
+        }
+
+        .spin-button:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #D44D6A, 0 4px 10px rgba(255, 107, 138, 0.3);
+        }
+
+        /* 確認モーダル */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: linear-gradient(180deg, var(--white) 0%, var(--cream) 100%);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 4px solid var(--pink-main);
+        }
+
+        @keyframes modalPop {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--pink-dark);
+            margin-bottom: 30px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn.yes {
+            background: linear-gradient(180deg, var(--yellow-main) 0%, #FFA500 100%);
+            color: #8B4513;
+            box-shadow: 0 4px 0 #CC8400;
+        }
+
+        .modal-btn.yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #CC8400;
+        }
+
+        .modal-btn.no {
+            background: linear-gradient(180deg, #E0E0E0 0%, #BDBDBD 100%);
+            color: #666;
+            box-shadow: 0 4px 0 #999;
+        }
+
+        .modal-btn.no:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #999;
+        }
+
+        /* カプセル演出 */
+        .capsule-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #FFE4EC 0%, #FFB6C1 50%, #FF9EB5 100%);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            flex-direction: column;
+        }
+
+        .capsule-screen.active {
+            display: flex;
+        }
+
+        .capsule {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .capsule-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100px;
+            background: linear-gradient(180deg, #FFD93D 0%, #FFA500 100%);
+            border-radius: 100px 100px 0 0;
+            border: 4px solid #E6A100;
+            transform-origin: center bottom;
+            z-index: 2;
+        }
+
+        .capsule-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200px;
+            height: 100px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #F0F0F0 100%);
+            border-radius: 0 0 100px 100px;
+            border: 4px solid #DDD;
+            border-top: none;
+        }
+
+        .capsule-shine {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+        }
+
+        .capsule.drop {
+            animation: capsuleDrop 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes capsuleDrop {
+            0% {
+                transform: translateY(-300px) rotate(-30deg);
+                opacity: 0;
+            }
+            60% {
+                transform: translateY(50px) rotate(10deg);
+            }
+            80% {
+                transform: translateY(-20px) rotate(-5deg);
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .capsule.shake {
+            animation: capsuleShake 0.5s ease-in-out 3;
+        }
+
+        @keyframes capsuleShake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .capsule-top.open {
+            animation: capsuleOpen 0.8s ease-out forwards;
+        }
+
+        @keyframes capsuleOpen {
+            0% {
+                transform: rotate(0deg) translateY(0);
+            }
+            100% {
+                transform: rotate(-120deg) translateY(-50px);
+            }
+        }
+
+        /* 光り輝く画像演出 */
+        .reveal-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #FFF8DC 0%, #FFD93D 100%);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 300;
+            flex-direction: column;
+        }
+
+        .reveal-screen.active {
+            display: flex;
+        }
+
+        .light-burst {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .light-ray {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 200%;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.8), transparent);
+            transform-origin: center center;
+            animation: rayRotate 3s linear infinite;
+        }
+
+        @keyframes rayRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .sparkle {
+            position: absolute;
+            font-size: 2rem;
+            animation: sparkleFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkleFloat {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.5) rotate(180deg); opacity: 0.5; }
+        }
+
+        .reveal-image {
+            width: 280px;
+            height: auto;
+            max-height: 60vh;
+            object-fit: contain;
+            border-radius: 20px;
+            box-shadow: 0 0 60px rgba(255, 217, 61, 0.8), 0 0 100px rgba(255, 255, 255, 0.5);
+            animation: imageReveal 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            z-index: 10;
+        }
+
+        @keyframes imageReveal {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .rank-text {
+            position: absolute;
+            top: 10%;
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--pink-dark);
+            text-shadow: 3px 3px 0 var(--white), 6px 6px 0 rgba(255, 107, 138, 0.3);
+            animation: rankPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            animation-delay: 0.5s;
+            opacity: 0;
+            z-index: 20;
+        }
+
+        @keyframes rankPop {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 結果画面 */
+        .result-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #FFE4EC 0%, #FFF5E6 50%, #E8F5E9 100%);
+            display: none;
+            justify-content: flex-start;
+            align-items: center;
+            z-index: 400;
+            flex-direction: column;
+            padding: 30px 20px;
+            overflow-y: auto;
+        }
+
+        .result-screen.active {
+            display: flex;
+        }
+
+        .result-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--pink-dark);
+            text-shadow: 2px 2px 0 var(--white);
+            margin-bottom: 20px;
+        }
+
+        .result-rank {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #8B4513;
+            background: linear-gradient(180deg, var(--yellow-main) 0%, #FFA500 100%);
+            padding: 15px 50px;
+            border-radius: 50px;
+            box-shadow: 0 6px 0 #CC8400, 0 10px 30px rgba(255, 165, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .result-image {
+            width: 300px;
+            max-width: 90%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .retry-button {
+            padding: 20px 40px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            color: white;
+            background: linear-gradient(180deg, var(--mint) 0%, #4ECDC4 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #3AA89F, 0 8px 20px rgba(78, 205, 196, 0.4);
+            transition: all 0.2s;
+            white-space: nowrap;
+            max-width: 90%;
+        }
+
+        .retry-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #3AA89F, 0 12px 25px rgba(78, 205, 196, 0.5);
+        }
+
+        .retry-button:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #3AA89F, 0 4px 10px rgba(78, 205, 196, 0.3);
+        }
+
+        /* デコレーション */
+        .decoration {
+            position: fixed;
+            font-size: 2rem;
+            z-index: 5;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .deco-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .deco-2 { top: 15%; right: 5%; animation-delay: 0.5s; }
+        .deco-3 { bottom: 20%; left: 8%; animation-delay: 1s; }
+        .deco-4 { bottom: 25%; right: 8%; animation-delay: 1.5s; }
+    </style>
 </head>
 <body>
-    <div class="header-image-wrapper">
-        <img src="みかサムネ.png" alt="みかのおまじないカレンダー" class="header-image">
-    </div>
-    
-    <div class="info-box">
-        <div class="info-item">
-            <span class="info-icon">⏰</span>
-            <p>毎朝7時に更新されるよ！<br>聞いたらXでおはようしにきてね〜💛</p>
-        </div>
-        <div class="info-item">
-            <span class="info-icon">🎧</span>
-            <p>今日の日付をタップして、「聞く」を押すと音声が流れるよ！</p>
-        </div>
-        <div class="info-item">
-            <span class="info-icon">🐣</span>
-            <p>他の人に聴かれないように、イヤホンで聞いてね！</p>
-        </div>
-    </div>
-    
-    <div class="container">
-        <header>
-            <h1>2025年11月</h1>
-        </header>
-        
-        <div class="calendar">
-            <div class="weekdays">
-                <div class="weekday">日</div>
-                <div class="weekday">月</div>
-                <div class="weekday">火</div>
-                <div class="weekday">水</div>
-                <div class="weekday">木</div>
-                <div class="weekday">金</div>
-                <div class="weekday">土</div>
+    <!-- 雪のアニメーション -->
+    <div class="snowflakes" id="snowflakes"></div>
+
+    <!-- デコレーション -->
+    <div class="decoration deco-1">🎄</div>
+    <div class="decoration deco-2">⭐</div>
+    <div class="decoration deco-3">🎁</div>
+    <div class="decoration deco-4">🔔</div>
+
+    <!-- メイン画面 -->
+    <div class="container" id="mainScreen">
+        <h1 class="title">
+            <span style="animation-delay: 0s;">み</span>
+            <span style="animation-delay: 0.1s;">か</span>
+            <span style="animation-delay: 0.2s;">ち</span>
+            <span style="animation-delay: 0.3s;">ゃ</span>
+            <span style="animation-delay: 0.4s;">ん</span>
+            <span style="animation-delay: 0.5s;">の</span>
+            <span style="animation-delay: 0.6s;">🎄</span>
+            <br>
+            <span style="animation-delay: 0.7s;">ク</span>
+            <span style="animation-delay: 0.8s;">リ</span>
+            <span style="animation-delay: 0.9s;">ス</span>
+            <span style="animation-delay: 1s;">マ</span>
+            <span style="animation-delay: 1.1s;">ス</span>
+            <span style="animation-delay: 1.2s;">ガ</span>
+            <span style="animation-delay: 1.3s;">チ</span>
+            <span style="animation-delay: 1.4s;">ャ</span>
+            <span style="animation-delay: 1.5s;">🎅</span>
+        </h1>
+
+        <div class="gacha-machine">
+            <div class="gacha-top"></div>
+            <div class="gacha-globe">
+                <div class="gacha-balls">
+                    <div class="mini-ball"></div>
+                    <div class="mini-ball"></div>
+                    <div class="mini-ball"></div>
+                    <div class="mini-ball"></div>
+                    <div class="mini-ball"></div>
+                    <div class="mini-ball"></div>
+                    <div class="mini-ball"></div>
+                    <div class="mini-ball"></div>
+                </div>
             </div>
+            <div class="gacha-body">
+                <div class="gacha-handle"></div>
+                <div class="gacha-dispenser"></div>
+            </div>
+            <div class="gacha-feet"></div>
+        </div>
+
+        <button class="spin-button" onclick="showConfirmModal()">1回回す</button>
+    </div>
+
+    <!-- 確認モーダル -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <div class="modal-text">本当に回す？🐣💛</div>
+            <div class="modal-buttons">
+                <button class="modal-btn yes" onclick="startGacha()">回す</button>
+                <button class="modal-btn no" onclick="hideConfirmModal()">回さない</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- カプセル演出画面 -->
+    <div class="capsule-screen" id="capsuleScreen">
+        <div class="capsule" id="capsule">
+            <div class="capsule-top" id="capsuleTop">
+                <div class="capsule-shine"></div>
+            </div>
+            <div class="capsule-bottom"></div>
+        </div>
+    </div>
+
+    <!-- 光り輝く画像演出画面 -->
+    <div class="reveal-screen" id="revealScreen">
+        <div class="light-burst">
+            <div class="light-ray" style="transform: translate(-50%, -50%) rotate(0deg);"></div>
+            <div class="light-ray" style="transform: translate(-50%, -50%) rotate(30deg);"></div>
+            <div class="light-ray" style="transform: translate(-50%, -50%) rotate(60deg);"></div>
+            <div class="light-ray" style="transform: translate(-50%, -50%) rotate(90deg);"></div>
+            <div class="light-ray" style="transform: translate(-50%, -50%) rotate(120deg);"></div>
+            <div class="light-ray" style="transform: translate(-50%, -50%) rotate(150deg);"></div>
+        </div>
+        <div class="sparkles" id="sparkles"></div>
+        <div class="rank-text" id="rankText">3等💛</div>
+        <img src="IMG_9991.jpg" alt="ガチャ結果" class="reveal-image" id="revealImage">
+    </div>
+
+    <!-- 結果画面 -->
+    <div class="result-screen" id="resultScreen">
+        <h2 class="result-title">ガチャ結果🐣</h2>
+        <div class="result-rank">3等💛</div>
+        <img src="IMG_9991.jpg" alt="ガチャ結果" class="result-image">
+        <button class="retry-button" onclick="resetGacha()">もう一度チャンスがあります…！</button>
+    </div>
+
+    <script>
+        // 雪を生成
+        function createSnowflakes() {
+            const container = document.getElementById('snowflakes');
+            const snowflakeChars = ['❄', '❅', '❆', '✧', '✦'];
             
-            <div class="days" id="calendar-days">
-                <!-- JavaScriptで日付を生成 -->
-            </div>
-        </div>
-    </div>
-    
-    <script src="script.js"></script>
+            for (let i = 0; i < 50; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.textContent = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                snowflake.style.fontSize = (Math.random() * 1 + 0.8) + 'rem';
+                container.appendChild(snowflake);
+            }
+        }
+
+        // キラキラを生成
+        function createSparkles() {
+            const container = document.getElementById('sparkles');
+            container.innerHTML = '';
+            const sparkleChars = ['✨', '⭐', '💫', '🌟', '✧'];
+            
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.textContent = sparkleChars[Math.floor(Math.random() * sparkleChars.length)];
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(sparkle);
+            }
+        }
+
+        // 確認モーダル表示
+        function showConfirmModal() {
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        // 確認モーダル非表示
+        function hideConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+        }
+
+        // ガチャ開始
+        function startGacha() {
+            hideConfirmModal();
+            
+            // カプセル画面を表示
+            const capsuleScreen = document.getElementById('capsuleScreen');
+            const capsule = document.getElementById('capsule');
+            const capsuleTop = document.getElementById('capsuleTop');
+            
+            capsuleScreen.classList.add('active');
+            
+            // カプセルをリセット
+            capsule.className = 'capsule';
+            capsuleTop.className = 'capsule-top';
+            
+            // カプセルが落ちてくる
+            setTimeout(() => {
+                capsule.classList.add('drop');
+            }, 100);
+            
+            // カプセルが揺れる
+            setTimeout(() => {
+                capsule.classList.remove('drop');
+                capsule.classList.add('shake');
+            }, 1200);
+            
+            // カプセルが開く
+            setTimeout(() => {
+                capsule.classList.remove('shake');
+                capsuleTop.classList.add('open');
+            }, 2700);
+            
+            // 光り輝く画像演出へ
+            setTimeout(() => {
+                capsuleScreen.classList.remove('active');
+                showReveal();
+            }, 3500);
+        }
+
+        // 光り輝く画像演出
+        function showReveal() {
+            createSparkles();
+            const revealScreen = document.getElementById('revealScreen');
+            const revealImage = document.getElementById('revealImage');
+            const rankText = document.getElementById('rankText');
+            
+            revealScreen.classList.add('active');
+            
+            // アニメーションをリセット
+            revealImage.style.animation = 'none';
+            rankText.style.animation = 'none';
+            
+            setTimeout(() => {
+                revealImage.style.animation = 'imageReveal 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards';
+                rankText.style.animation = 'rankPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards';
+                rankText.style.animationDelay = '0.5s';
+            }, 100);
+            
+            // 結果画面へ
+            setTimeout(() => {
+                revealScreen.classList.remove('active');
+                showResult();
+            }, 3000);
+        }
+
+        // 結果画面表示
+        function showResult() {
+            document.getElementById('resultScreen').classList.add('active');
+        }
+
+        // ガチャリセット
+        function resetGacha() {
+            document.getElementById('resultScreen').classList.remove('active');
+        }
+
+        // 初期化
+        createSnowflakes();
+    </script>
 </body>
 </html>
 
