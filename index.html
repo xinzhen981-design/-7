@@ -782,6 +782,20 @@
             }
         }
 
+        // パックのリンク
+        const packLinks = {
+            1: 'https://note.com/noble_elk7293/n/ned8f260c8fa9',
+            2: 'https://note.com/noble_elk7293/n/n8ba1d2f2a556',
+            3: 'https://note.com/noble_elk7293/n/n7d471660a78c',
+            4: 'https://note.com/noble_elk7293/n/n7c6e6bde6044',
+            5: 'https://note.com/noble_elk7293/n/nf171efa18fdd',
+            6: 'https://note.com/noble_elk7293/n/nd9bb5e895756',
+            7: 'https://note.com/noble_elk7293/n/nc2693d600209',
+            8: 'https://note.com/noble_elk7293/n/n9f6a3a94e774',
+            9: 'https://note.com/noble_elk7293/n/n2965adf353bc',
+            10: 'https://note.com/noble_elk7293/n/neba1b484b10a'
+        };
+
         // パック選択時のエフェクト
         function selectPack(number) {
             // キラキラエフェクト
@@ -798,9 +812,12 @@
                 }, i * 50);
             }
 
-            // アラート表示
+            // 確認ダイアログ
             setTimeout(() => {
-                alert(`🎁 パック${number}を選んだね！🎄\n何が出るかな？✨`);
+                const confirmed = confirm(`🎁 パック${number}を開きますか？\n\n本当に開きますか？`);
+                if (confirmed) {
+                    window.open(packLinks[number], '_blank');
+                }
             }, 300);
         }
 
