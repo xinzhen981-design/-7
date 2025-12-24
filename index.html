@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎄 みかのクリスマスパック 🎄</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=Cherry+Bomb+One&display=swap" rel="stylesheet">
+    <title>🎄 みかちゃんのクリスマスパック 🎄</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,16 +14,13 @@
 
         body {
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #1a0a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 30%, #1a472a 60%, #0d2818 100%);
             font-family: 'Zen Maru Gothic', sans-serif;
             overflow: hidden;
             position: relative;
         }
 
-        /* 雪のパーティクル */
+        /* 雪のエフェクト */
         .snowflakes {
             position: fixed;
             top: 0;
@@ -40,7 +35,6 @@
             position: absolute;
             color: white;
             font-size: 1rem;
-            text-shadow: 0 0 5px rgba(255,255,255,0.8);
             animation: fall linear infinite;
             opacity: 0.8;
         }
@@ -54,448 +48,8 @@
             }
         }
 
-        /* パックコンテナ */
-        .pack-container {
-            position: relative;
-            z-index: 10;
-            perspective: 1000px;
-        }
-
-        /* クリスマスパック */
-        .christmas-pack {
-            width: 320px;
-            height: 450px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotateX(5deg); }
-            50% { transform: translateY(-15px) rotateX(5deg); }
-        }
-
-        /* パック上部 */
-        .pack-top-half {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 50%;
-            background: linear-gradient(180deg, 
-                #c41e3a 0%, 
-                #8b0000 50%,
-                #c41e3a 100%
-            );
-            border-radius: 20px 20px 0 0;
-            box-shadow: 
-                0 0 30px rgba(255, 215, 0, 0.3),
-                inset 0 2px 10px rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-            transform-origin: top center;
-            transition: transform 0.8s ease-out, opacity 0.8s ease;
-            z-index: 15;
-        }
-
-        .pack-top-half.cut {
-            transform: rotateX(-120deg) translateY(-50px);
-            opacity: 0;
-        }
-
-        /* パック下部 */
-        .pack-bottom-half {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50%;
-            background: linear-gradient(180deg, 
-                #c41e3a 0%, 
-                #8b0000 50%,
-                #c41e3a 100%
-            );
-            border-radius: 0 0 30px 30px;
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.5),
-                0 0 30px rgba(255, 215, 0, 0.3),
-                inset 0 2px 10px rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-            z-index: 10;
-        }
-
-        /* パックの模様 */
-        .pack-pattern {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                repeating-linear-gradient(
-                    45deg,
-                    transparent,
-                    transparent 20px,
-                    rgba(255, 215, 0, 0.1) 20px,
-                    rgba(255, 215, 0, 0.1) 40px
-                );
-            pointer-events: none;
-        }
-
-        /* 金色のリボン - 縦（上部） */
-        .ribbon-vertical-top {
-            position: absolute;
-            width: 50px;
-            height: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(90deg, 
-                #b8860b, #ffd700, #ffec8b, #ffd700, #b8860b
-            );
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-        }
-
-        /* 金色のリボン - 縦（下部） */
-        .ribbon-vertical-bottom {
-            position: absolute;
-            width: 50px;
-            height: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(90deg, 
-                #b8860b, #ffd700, #ffec8b, #ffd700, #b8860b
-            );
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-        }
-
-        /* 金色のリボン - 横 */
-        .ribbon-horizontal {
-            position: absolute;
-            width: 100%;
-            height: 50px;
-            bottom: 0;
-            background: linear-gradient(180deg, 
-                #b8860b, #ffd700, #ffec8b, #ffd700, #b8860b
-            );
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-        }
-
-        .ribbon-horizontal-bottom {
-            position: absolute;
-            width: 100%;
-            height: 50px;
-            top: 0;
-            background: linear-gradient(180deg, 
-                #b8860b, #ffd700, #ffec8b, #ffd700, #b8860b
-            );
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-        }
-
-        /* リボンの飾り */
-        .bow {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100px;
-            height: 100px;
-            z-index: 20;
-        }
-
-        .bow-center {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: radial-gradient(circle, #ffd700, #b8860b);
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-        }
-
-        .bow-loop {
-            position: absolute;
-            width: 50px;
-            height: 35px;
-            background: linear-gradient(135deg, #ffd700, #b8860b);
-            border-radius: 50% 50% 50% 50%;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        .bow-loop.left {
-            top: 50%;
-            left: -15px;
-            transform: translateY(-50%) rotate(-30deg);
-        }
-
-        .bow-loop.right {
-            top: 50%;
-            right: -15px;
-            transform: translateY(-50%) rotate(30deg);
-        }
-
-        /* 切り取り線エリア */
-        .cut-area {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            width: 100%;
-            height: 80px;
-            cursor: pointer;
-            z-index: 30;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .cut-line-visual {
-            position: absolute;
-            top: 50%;
-            left: 10px;
-            right: 10px;
-            height: 4px;
-            background: repeating-linear-gradient(
-                90deg,
-                #ffd700 0px,
-                #ffd700 10px,
-                transparent 10px,
-                transparent 20px
-            );
-            transform: translateY(-50%);
-            border-radius: 2px;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-        }
-
-        .cut-text {
-            position: relative;
-            background: linear-gradient(135deg, #228b22, #32cd32);
-            padding: 10px 20px;
-            border-radius: 25px;
-            border: 3px dashed #ffd700;
-            box-shadow: 
-                0 0 20px rgba(50, 205, 50, 0.5),
-                inset 0 2px 10px rgba(255, 255, 255, 0.3);
-            z-index: 2;
-        }
-
-        .cut-text span {
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 700;
-            text-shadow: 
-                0 0 10px rgba(255, 255, 255, 0.8),
-                2px 2px 4px rgba(0, 0, 0, 0.5);
-            white-space: nowrap;
-        }
-
-        .cut-text::before,
-        .cut-text::after {
-            content: '✨';
-            animation: sparkle 1s ease-in-out infinite;
-        }
-
-        .cut-text::after {
-            animation-delay: 0.5s;
-        }
-
-        @keyframes sparkle {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
-        /* 切り取りエフェクト */
-        .cut-progress {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 0%;
-            height: 6px;
-            background: linear-gradient(90deg,
-                rgba(255, 255, 255, 0) 0%,
-                rgba(255, 215, 0, 0.8) 30%,
-                rgba(255, 255, 255, 1) 50%,
-                rgba(255, 215, 0, 0.8) 70%,
-                rgba(255, 255, 255, 0) 100%
-            );
-            transform: translateY(-50%);
-            z-index: 35;
-            pointer-events: none;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-        }
-
-        /* ヒント矢印 */
-        .hint-arrow {
-            position: absolute;
-            top: 50%;
-            left: 30px;
-            transform: translateY(-50%);
-            font-size: 2rem;
-            color: #ffd700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-            animation: slideRight 1.5s ease-in-out infinite;
-            z-index: 31;
-        }
-
-        @keyframes slideRight {
-            0%, 100% { transform: translateY(-50%) translateX(0); opacity: 1; }
-            50% { transform: translateY(-50%) translateX(220px); opacity: 0; }
-        }
-
-        /* 装飾 - 星（上部） */
-        .star-top {
-            position: absolute;
-            color: #ffd700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-            animation: twinkle 2s ease-in-out infinite;
-        }
-
-        .star-top:nth-child(1) { top: 20px; left: 20px; font-size: 1.5rem; animation-delay: 0s; }
-        .star-top:nth-child(2) { top: 60px; right: 25px; font-size: 1.2rem; animation-delay: 0.3s; }
-        .star-top:nth-child(3) { top: 120px; left: 30px; font-size: 1rem; animation-delay: 0.6s; }
-        .star-top:nth-child(4) { top: 150px; right: 20px; font-size: 1.3rem; animation-delay: 0.9s; }
-
-        /* 装飾 - 星（下部） */
-        .star-bottom {
-            position: absolute;
-            color: #ffd700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-            animation: twinkle 2s ease-in-out infinite;
-        }
-
-        .star-bottom:nth-child(1) { top: 80px; left: 50px; font-size: 1.1rem; animation-delay: 1.2s; }
-        .star-bottom:nth-child(2) { top: 120px; right: 40px; font-size: 0.9rem; animation-delay: 1.5s; }
-        .star-bottom:nth-child(3) { top: 160px; left: 25px; font-size: 1.2rem; animation-delay: 0.2s; }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
-            50% { opacity: 0.5; transform: scale(1.2) rotate(180deg); }
-        }
-
-        /* 切れる瞬間のフラッシュ */
-        .cut-flash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            z-index: 50;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .cut-flash.active {
-            animation: flash 0.5s ease-out;
-        }
-
-        @keyframes flash {
-            0% { opacity: 0; }
-            20% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
-        /* 切れる線のエフェクト */
-        .cut-effect {
-            position: fixed;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 8px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                #ffd700 20%, 
-                #fff 50%, 
-                #ffd700 80%, 
-                transparent 100%
-            );
-            z-index: 51;
-            opacity: 0;
-            transform: translateY(-50%) scaleX(0);
-            pointer-events: none;
-        }
-
-        .cut-effect.active {
-            animation: cutSlash 0.4s ease-out;
-        }
-
-        @keyframes cutSlash {
-            0% {
-                opacity: 1;
-                transform: translateY(-50%) scaleX(0);
-            }
-            50% {
-                opacity: 1;
-                transform: translateY(-50%) scaleX(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-50%) scaleX(1);
-            }
-        }
-
-        /* 暗転オーバーレイ */
-        .blackout {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 100;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s ease;
-        }
-
-        .blackout.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* カウントダウン */
-        .countdown {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Cherry Bomb One', cursive;
-            font-size: 15rem;
-            color: #ffd700;
-            text-shadow: 
-                0 0 30px rgba(255, 215, 0, 0.8),
-                0 0 60px rgba(255, 215, 0, 0.5),
-                0 0 100px rgba(255, 215, 0, 0.3);
-            z-index: 101;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .countdown.show {
-            animation: countPulse 1.5s ease-out forwards;
-        }
-
-        @keyframes countPulse {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.3);
-            }
-            30% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.1);
-            }
-            60% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.8);
-            }
-        }
-
-        /* 結果表示 */
-        .result-container {
+        /* パック画面 */
+        .pack-screen {
             position: fixed;
             top: 0;
             left: 0;
@@ -505,131 +59,384 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 102;
+            z-index: 10;
+            transition: opacity 0.5s ease;
+        }
+
+        .pack-screen.hidden {
             opacity: 0;
             pointer-events: none;
-            transition: all 0.5s ease;
-            gap: 30px;
         }
 
-        .result-container.show {
-            opacity: 1;
-            pointer-events: auto;
+        /* タイトル */
+        .title {
+            color: #ffd700;
+            font-size: 2rem;
+            font-weight: 900;
+            text-shadow: 
+                0 0 10px #ffd700,
+                0 0 20px #ff6b6b,
+                2px 2px 0 #c41e3a;
+            margin-bottom: 30px;
+            animation: titleGlow 2s ease-in-out infinite;
         }
 
-        .result-box {
-            background: linear-gradient(135deg, 
-                #ff6b6b 0%, 
-                #ee5a5a 25%, 
-                #ff8787 50%, 
-                #ee5a5a 75%, 
-                #ff6b6b 100%
-            );
-            padding: 60px 80px;
-            border-radius: 30px;
-            transform: scale(0) rotate(-180deg);
-            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 
-                0 0 50px rgba(255, 215, 0, 0.8),
-                0 0 100px rgba(255, 107, 107, 0.5),
-                inset 0 0 30px rgba(255, 255, 255, 0.3);
-            border: 5px solid #ffd700;
+        @keyframes titleGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        /* パック本体 */
+        .pack-container {
             position: relative;
+            width: 280px;
+            height: 400px;
+        }
+
+        .pack {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                #c41e3a 0%, 
+                #a01830 20%,
+                #c41e3a 40%,
+                #8b1528 60%,
+                #c41e3a 80%,
+                #a01830 100%);
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 
+                0 10px 40px rgba(0,0,0,0.5),
+                inset 0 2px 10px rgba(255,255,255,0.2),
+                0 0 30px rgba(196, 30, 58, 0.5);
             overflow: hidden;
+            border: 4px solid #ffd700;
         }
 
-        .result-container.show .result-box {
-            transform: scale(1) rotate(0deg);
-        }
-
-        .result-box::before {
+        /* パックの装飾 */
+        .pack::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(
-                transparent,
-                rgba(255, 255, 255, 0.3),
-                transparent,
-                rgba(255, 255, 255, 0.3),
-                transparent
-            );
-            animation: spin 3s linear infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, transparent 70%);
+            pointer-events: none;
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* リボン */
+        .ribbon-vertical {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 100%;
+            background: linear-gradient(90deg, #228b22, #32cd32, #228b22);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
         }
 
-        .result-text {
-            font-family: 'Cherry Bomb One', cursive;
-            font-size: 5rem;
+        .ribbon-horizontal {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(180deg, #228b22, #32cd32, #228b22);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .ribbon-bow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            z-index: 5;
+        }
+
+        .bow-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #ffd700, #ffaa00);
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ffd700;
+        }
+
+        .bow-loop {
+            position: absolute;
+            width: 40px;
+            height: 25px;
+            background: linear-gradient(135deg, #228b22, #32cd32);
+            border-radius: 50%;
+        }
+
+        .bow-loop:nth-child(1) {
+            top: 5px;
+            left: 0;
+            transform: rotate(-30deg);
+        }
+
+        .bow-loop:nth-child(2) {
+            top: 5px;
+            right: 0;
+            transform: rotate(30deg);
+        }
+
+        .bow-loop:nth-child(3) {
+            bottom: 5px;
+            left: 10px;
+            transform: rotate(-150deg);
+        }
+
+        .bow-loop:nth-child(4) {
+            bottom: 5px;
+            right: 10px;
+            transform: rotate(150deg);
+        }
+
+        /* パックの装飾（星やハート） */
+        .decoration {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: twinkle 1.5s ease-in-out infinite;
+        }
+
+        .decoration:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .decoration:nth-child(2) { top: 15%; right: 15%; animation-delay: 0.3s; }
+        .decoration:nth-child(3) { bottom: 20%; left: 15%; animation-delay: 0.6s; }
+        .decoration:nth-child(4) { bottom: 15%; right: 10%; animation-delay: 0.9s; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        /* 切り取り線エリア */
+        .cut-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(180deg, 
+                rgba(255,255,255,0.1) 0%,
+                transparent 100%);
+            border-bottom: 3px dashed #ffd700;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cut-instruction {
             color: #fff;
-            text-shadow: 
-                3px 3px 0 #ffd700,
-                6px 6px 0 #ff6b6b,
-                0 0 30px rgba(255, 215, 0, 0.8),
-                0 0 60px rgba(255, 255, 255, 0.5);
-            position: relative;
-            z-index: 1;
-            animation: bounce 0.5s ease-in-out infinite alternate;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+            animation: bounce 1s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .cut-arrow {
+            color: #ffd700;
+            font-size: 1.2rem;
+            margin-top: 5px;
+            pointer-events: none;
         }
 
         @keyframes bounce {
-            from { transform: translateY(0) scale(1); }
-            to { transform: translateY(-10px) scale(1.05); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
-        /* ここ押してねボタン */
-        .press-button {
-            background: linear-gradient(135deg, #ff69b4, #ff1493, #ff69b4);
-            padding: 20px 50px;
-            border-radius: 50px;
-            border: 4px solid #fff;
-            cursor: pointer;
-            transform: scale(0);
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s;
+        /* 切れる演出 */
+        .cut-line {
+            position: absolute;
+            top: 58px;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                transparent,
+                #fff,
+                #ffd700,
+                #fff,
+                transparent);
+            box-shadow: 0 0 20px #ffd700, 0 0 40px #fff;
+            transition: width 0.1s linear;
+            z-index: 15;
+        }
+
+        /* 暗転画面 */
+        .blackout-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+
+        .blackout-screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* カウントダウン */
+        .countdown {
+            color: #ffd700;
+            font-size: 8rem;
+            font-weight: 900;
+            text-shadow: 
+                0 0 30px #ffd700,
+                0 0 60px #ff6b6b,
+                0 0 90px #c41e3a;
+            opacity: 0;
+            transform: scale(2);
+            transition: all 0.5s ease;
+        }
+
+        .countdown.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .countdown.hide {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        /* 結果画面 */
+        .result-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #2d1b4e 0%, #1a0f2e 50%, #0d0618 100%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+
+        .result-screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* 紙吹雪エフェクト */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 250;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* 結果テキスト */
+        .result-badge {
+            position: relative;
+            padding: 30px 80px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00, #ffd700);
+            border-radius: 20px;
             box-shadow: 
-                0 10px 30px rgba(255, 105, 180, 0.5),
-                0 0 20px rgba(255, 255, 255, 0.3),
-                inset 0 2px 10px rgba(255, 255, 255, 0.5);
+                0 0 50px rgba(255, 215, 0, 0.8),
+                0 0 100px rgba(255, 215, 0, 0.4),
+                inset 0 2px 10px rgba(255,255,255,0.5);
+            animation: resultPulse 2s ease-in-out infinite;
+            transform: scale(0);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .result-badge.show {
+            transform: scale(1);
+        }
+
+        @keyframes resultPulse {
+            0%, 100% { box-shadow: 0 0 50px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 0 80px rgba(255, 215, 0, 1), 0 0 150px rgba(255, 215, 0, 0.6); }
+        }
+
+        .result-text {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #c41e3a;
+            text-shadow: 
+                2px 2px 0 #fff,
+                4px 4px 0 rgba(196, 30, 58, 0.3);
+        }
+
+        /* ボタン */
+        .action-button {
+            margin-top: 50px;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Zen Maru Gothic', sans-serif;
+            color: #fff;
+            background: linear-gradient(135deg, #c41e3a, #8b1528);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 
+                0 8px 30px rgba(196, 30, 58, 0.5),
+                0 0 20px rgba(196, 30, 58, 0.3);
+            transform: scale(0);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
         }
 
-        .result-container.show .press-button {
+        .action-button.show {
             transform: scale(1);
+            animation: buttonFloat 2s ease-in-out infinite;
         }
 
-        .press-button:hover {
-            transform: scale(1.1);
-            box-shadow: 
-                0 15px 40px rgba(255, 105, 180, 0.7),
-                0 0 30px rgba(255, 255, 255, 0.5),
-                inset 0 2px 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .press-button:active {
-            transform: scale(0.95);
-        }
-
-        .press-button-text {
-            font-family: 'Zen Maru Gothic', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 
-                2px 2px 0 #ff1493,
-                0 0 10px rgba(255, 255, 255, 0.8);
-            position: relative;
-            z-index: 1;
-        }
-
-        .press-button::before {
+        .action-button::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -639,10 +446,11 @@
             background: linear-gradient(
                 45deg,
                 transparent 30%,
-                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255,255,255,0.3) 50%,
                 transparent 70%
             );
-            animation: shine 2s infinite;
+            transform: rotate(45deg);
+            animation: shine 3s ease-in-out infinite;
         }
 
         @keyframes shine {
@@ -650,419 +458,296 @@
             100% { transform: translateX(100%) rotate(45deg); }
         }
 
-        /* ハートアニメーション */
-        .heart {
-            display: inline-block;
-            animation: heartbeat 0.8s ease-in-out infinite;
+        @keyframes buttonFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
         }
 
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
+        .action-button:hover {
+            background: linear-gradient(135deg, #d42a4a, #a01830);
+            box-shadow: 
+                0 12px 40px rgba(196, 30, 58, 0.7),
+                0 0 30px rgba(196, 30, 58, 0.5);
         }
 
-        /* 紙吹雪 */
-        .confetti {
-            position: fixed;
-            width: 15px;
-            height: 15px;
-            z-index: 103;
-            animation: confetti-fall 3s ease-out forwards;
+        .action-button:active {
+            transform: scale(0.95);
         }
 
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(-100vh) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        /* キラキラエフェクト */
-        .sparkle-effect {
+        /* 星の装飾（結果画面） */
+        .star-decoration {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            background: radial-gradient(circle, #fff, transparent);
-            border-radius: 50%;
+            font-size: 2rem;
+            animation: starFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes starFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* 光の筋エフェクト */
+        .light-rays {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(255,215,0,0.1) 10deg,
+                transparent 20deg,
+                transparent 30deg,
+                rgba(255,215,0,0.1) 40deg,
+                transparent 50deg,
+                transparent 60deg,
+                rgba(255,215,0,0.1) 70deg,
+                transparent 80deg,
+                transparent 90deg
+            );
+            animation: raysSpin 20s linear infinite;
             pointer-events: none;
-            animation: sparkle-burst 0.6s ease-out forwards;
         }
 
-        @keyframes sparkle-burst {
-            0% {
-                transform: scale(0);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(3);
-                opacity: 0;
-            }
-        }
-
-        /* 切れた破片 */
-        .debris {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, #c41e3a, #8b0000);
-            z-index: 52;
-            animation: debris-fly 1s ease-out forwards;
-            border-radius: 3px;
-        }
-
-        @keyframes debris-fly {
-            0% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(200px) rotate(720deg);
-            }
-        }
-
-        /* タイトル */
-        .title {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'Cherry Bomb One', cursive;
-            font-size: 2.5rem;
-            color: #ffd700;
-            text-shadow: 
-                0 0 20px rgba(255, 215, 0, 0.8),
-                0 0 40px rgba(255, 215, 0, 0.5),
-                3px 3px 0 #c41e3a;
-            z-index: 5;
-            white-space: nowrap;
-        }
-
-        .title::before {
-            content: '🎄 ';
-        }
-
-        .title::after {
-            content: ' 🎄';
+        @keyframes raysSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- 雪のパーティクル -->
+    <!-- 雪のエフェクト -->
     <div class="snowflakes" id="snowflakes"></div>
 
-    <!-- タイトル -->
-    <div class="title">Merry Christmas!</div>
-
-    <!-- 切れるエフェクト -->
-    <div class="cut-flash" id="cutFlash"></div>
-    <div class="cut-effect" id="cutEffect"></div>
-
-    <!-- パック -->
-    <div class="pack-container">
-        <div class="christmas-pack">
-            <!-- パック上部 -->
-            <div class="pack-top-half" id="packTopHalf">
-                <div class="pack-pattern"></div>
-                <div class="ribbon-vertical-top"></div>
+    <!-- パック画面 -->
+    <div class="pack-screen" id="packScreen">
+        <h1 class="title">🎄 クリスマスパック 🎄</h1>
+        
+        <div class="pack-container">
+            <div class="pack">
+                <!-- 装飾 -->
+                <span class="decoration">⭐</span>
+                <span class="decoration">❤️</span>
+                <span class="decoration">🎄</span>
+                <span class="decoration">✨</span>
+                
+                <!-- リボン -->
+                <div class="ribbon-vertical"></div>
                 <div class="ribbon-horizontal"></div>
-                <span class="star-top">⭐</span>
-                <span class="star-top">✦</span>
-                <span class="star-top">⭐</span>
-                <span class="star-top">✦</span>
-            </div>
-
-            <!-- パック下部 -->
-            <div class="pack-bottom-half" id="packBottomHalf">
-                <div class="pack-pattern"></div>
-                <div class="ribbon-vertical-bottom"></div>
-                <div class="ribbon-horizontal-bottom"></div>
-                <!-- リボンの飾り -->
-                <div class="bow">
-                    <div class="bow-loop left"></div>
-                    <div class="bow-loop right"></div>
+                <div class="ribbon-bow">
+                    <div class="bow-loop"></div>
+                    <div class="bow-loop"></div>
+                    <div class="bow-loop"></div>
+                    <div class="bow-loop"></div>
                     <div class="bow-center"></div>
                 </div>
-                <span class="star-bottom">⭐</span>
-                <span class="star-bottom">✦</span>
-                <span class="star-bottom">⭐</span>
-            </div>
-
-            <!-- 切り取りエリア -->
-            <div class="cut-area" id="cutArea">
-                <div class="cut-line-visual"></div>
-                <div class="cut-text">
-                    <span>👉 横になぞったら切れるよ！ 👈</span>
+                
+                <!-- 切り取りエリア -->
+                <div class="cut-area" id="cutArea">
+                    <span class="cut-instruction">👉 横になぞったら切れるよ！ 👈</span>
+                    <span class="cut-arrow">→→→→→→→→→→</span>
                 </div>
-                <div class="hint-arrow">→</div>
+                
+                <!-- 切れる線 -->
+                <div class="cut-line" id="cutLine"></div>
             </div>
-
-            <!-- 切り取り進捗 -->
-            <div class="cut-progress" id="cutProgress"></div>
         </div>
     </div>
 
-    <!-- 暗転オーバーレイ -->
-    <div class="blackout" id="blackout"></div>
+    <!-- 暗転画面 -->
+    <div class="blackout-screen" id="blackoutScreen">
+        <div class="countdown" id="countdown"></div>
+    </div>
 
-    <!-- カウントダウン -->
-    <div class="countdown" id="countdown"></div>
-
-    <!-- 結果表示 -->
-    <div class="result-container" id="resultContainer">
-        <div class="result-box">
-            <div class="result-text">３等！！</div>
+    <!-- 結果画面 -->
+    <div class="result-screen" id="resultScreen">
+        <div class="light-rays"></div>
+        <div class="confetti-container" id="confettiContainer"></div>
+        
+        <div class="result-badge" id="resultBadge">
+            <span class="result-text">２等</span>
         </div>
-        <div class="press-button" id="pressButton">
-            <span class="press-button-text">ここ押してね<span class="heart">♡</span></span>
-        </div>
+        
+        <button class="action-button" id="actionButton">
+            ここを押してね♡
+        </button>
     </div>
 
     <script>
         // 雪を生成
         function createSnowflakes() {
             const container = document.getElementById('snowflakes');
-            const snowflakeChars = ['❄', '❅', '❆', '✦', '✧'];
+            const snowflakeChars = ['❄', '❅', '❆', '✧', '✦'];
             
             for (let i = 0; i < 50; i++) {
                 const snowflake = document.createElement('div');
                 snowflake.className = 'snowflake';
                 snowflake.textContent = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
-                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.left = Math.random() * 100 + '%';
                 snowflake.style.animationDuration = (Math.random() * 5 + 5) + 's';
-                snowflake.style.animationDelay = (Math.random() * 10) + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
                 snowflake.style.fontSize = (Math.random() * 1 + 0.5) + 'rem';
                 container.appendChild(snowflake);
             }
         }
+        createSnowflakes();
 
-        // 要素の取得
+        // 切り取り機能
         const cutArea = document.getElementById('cutArea');
-        const cutProgress = document.getElementById('cutProgress');
-        const packTopHalf = document.getElementById('packTopHalf');
-        const cutFlash = document.getElementById('cutFlash');
-        const cutEffect = document.getElementById('cutEffect');
-        const blackout = document.getElementById('blackout');
+        const cutLine = document.getElementById('cutLine');
+        const packScreen = document.getElementById('packScreen');
+        const blackoutScreen = document.getElementById('blackoutScreen');
         const countdown = document.getElementById('countdown');
-        const resultContainer = document.getElementById('resultContainer');
-        const pressButton = document.getElementById('pressButton');
-        
+        const resultScreen = document.getElementById('resultScreen');
+        const resultBadge = document.getElementById('resultBadge');
+        const actionButton = document.getElementById('actionButton');
+
         let isDragging = false;
         let startX = 0;
-        let progress = 0;
-        let isRevealed = false;
+        let cutProgress = 0;
+        let isCut = false;
 
-        // キラキラエフェクト
-        function createSparkle(x, y) {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle-effect';
-            sparkle.style.left = x + 'px';
-            sparkle.style.top = y + 'px';
-            document.body.appendChild(sparkle);
-            
-            setTimeout(() => sparkle.remove(), 600);
+        function handleStart(e) {
+            if (isCut) return;
+            isDragging = true;
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            startX = clientX;
+            cutProgress = 0;
         }
 
-        // 破片エフェクト
-        function createDebris(x, y) {
-            for (let i = 0; i < 20; i++) {
-                const debris = document.createElement('div');
-                debris.className = 'debris';
-                debris.style.left = (x + Math.random() * 200 - 100) + 'px';
-                debris.style.top = y + 'px';
-                debris.style.width = (Math.random() * 20 + 5) + 'px';
-                debris.style.height = (Math.random() * 20 + 5) + 'px';
-                debris.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
-                document.body.appendChild(debris);
+        function handleMove(e) {
+            if (!isDragging || isCut) return;
+            
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const deltaX = clientX - startX;
+            
+            // 右方向へのドラッグのみ
+            if (deltaX > 0) {
+                cutProgress = Math.min(deltaX / 200, 1);
+                cutLine.style.width = (cutProgress * 100) + '%';
                 
-                setTimeout(() => debris.remove(), 1000);
+                // 切り取り完了
+                if (cutProgress >= 1) {
+                    completeCut();
+                }
             }
+        }
+
+        function handleEnd() {
+            if (isCut) return;
+            isDragging = false;
+            
+            // 途中で離した場合はリセット
+            if (cutProgress < 1) {
+                cutLine.style.width = '0';
+                cutProgress = 0;
+            }
+        }
+
+        function completeCut() {
+            isCut = true;
+            isDragging = false;
+            
+            // 切れる効果音的な演出（画面を一瞬震わせる）
+            document.body.style.animation = 'none';
+            document.body.offsetHeight; // リフロー
+            
+            // 少し遅延してから暗転
+            setTimeout(() => {
+                packScreen.classList.add('hidden');
+                blackoutScreen.classList.add('active');
+                
+                // カウントダウン開始
+                startCountdown();
+            }, 500);
+        }
+
+        // イベントリスナー
+        cutArea.addEventListener('mousedown', handleStart);
+        cutArea.addEventListener('touchstart', handleStart);
+        document.addEventListener('mousemove', handleMove);
+        document.addEventListener('touchmove', handleMove);
+        document.addEventListener('mouseup', handleEnd);
+        document.addEventListener('touchend', handleEnd);
+
+        // カウントダウン
+        function startCountdown() {
+            const numbers = ['５', '４', '３', '２', '１', '０'];
+            let index = 0;
+            
+            function showNumber() {
+                if (index < numbers.length) {
+                    countdown.textContent = numbers[index];
+                    countdown.classList.remove('hide');
+                    countdown.classList.add('show');
+                    
+                    setTimeout(() => {
+                        countdown.classList.remove('show');
+                        countdown.classList.add('hide');
+                        
+                        setTimeout(() => {
+                            index++;
+                            if (index < numbers.length) {
+                                showNumber();
+                            } else {
+                                // カウントダウン終了
+                                setTimeout(() => {
+                                    showResult();
+                                }, 500);
+                            }
+                        }, 300);
+                    }, 700);
+                }
+            }
+            
+            setTimeout(showNumber, 500);
+        }
+
+        // 結果表示
+        function showResult() {
+            blackoutScreen.classList.remove('active');
+            resultScreen.classList.add('active');
+            
+            // 紙吹雪を生成
+            createConfetti();
+            
+            // 結果バッジ表示
+            setTimeout(() => {
+                resultBadge.classList.add('show');
+            }, 300);
+            
+            // ボタン表示
+            setTimeout(() => {
+                actionButton.classList.add('show');
+            }, 1000);
         }
 
         // 紙吹雪
         function createConfetti() {
-            const colors = ['#ff6b6b', '#ffd700', '#32cd32', '#ff69b4', '#00bfff', '#ff8c00'];
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#ffd700', '#c41e3a', '#228b22', '#ff69b4', '#00bfff', '#ff6347'];
             
             for (let i = 0; i < 100; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
-                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                    document.body.appendChild(confetti);
-                    
-                    setTimeout(() => confetti.remove(), 3000);
-                }, i * 30);
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                if (Math.random() > 0.5) {
+                    confetti.style.borderRadius = '50%';
+                }
+                
+                container.appendChild(confetti);
             }
         }
 
-        // カウントダウン表示（ゆっくり版）
-        function showCountdown(callback) {
-            const numbers = ['５', '４', '３', '２', '１', '０'];
-            let index = 0;
-
-            function showNext() {
-                if (index < numbers.length) {
-                    countdown.textContent = numbers[index];
-                    countdown.classList.remove('show');
-                    // 強制リフロー
-                    void countdown.offsetWidth;
-                    countdown.classList.add('show');
-                    index++;
-                    setTimeout(showNext, 1500); // 1.5秒ごとに表示
-                } else {
-                    countdown.classList.remove('show');
-                    callback();
-                }
-            }
-
-            showNext();
-        }
-
-        // 結果を表示
-        function showResult() {
-            if (isRevealed) return;
-            isRevealed = true;
-            
-            // 光が完全に広がる
-            cutProgress.style.width = '100%';
-            cutProgress.style.background = 'linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 215, 0, 1), rgba(255, 255, 255, 1))';
-            
-            // キラキラを出す
-            const rect = cutArea.getBoundingClientRect();
-            for (let i = 0; i < 30; i++) {
-                setTimeout(() => {
-                    createSparkle(
-                        rect.left + Math.random() * rect.width,
-                        rect.top + Math.random() * rect.height
-                    );
-                }, i * 30);
-            }
-            
-            // 切れるエフェクト
-            setTimeout(() => {
-                cutFlash.classList.add('active');
-                cutEffect.classList.add('active');
-                createDebris(rect.left + rect.width / 2, rect.top);
-            }, 400);
-
-            // パックの上部が切れて開く
-            setTimeout(() => {
-                packTopHalf.classList.add('cut');
-            }, 600);
-
-            // 暗転開始
-            setTimeout(() => {
-                blackout.classList.add('active');
-            }, 1400);
-
-            // カウントダウン開始
-            setTimeout(() => {
-                showCountdown(() => {
-                    // カウントダウン後に結果表示
-                    resultContainer.classList.add('show');
-                    createConfetti();
-                });
-            }, 2500);
-        }
-
-        // イベントリスナー
-        function getClientX(e) {
-            return e.touches ? e.touches[0].clientX : e.clientX;
-        }
-
-        cutArea.addEventListener('mousedown', (e) => {
-            if (isRevealed) return;
-            isDragging = true;
-            startX = getClientX(e);
-            e.preventDefault();
+        // ボタンクリック
+        actionButton.addEventListener('click', () => {
+            alert('🎄 メリークリスマス！ 🎄\n\nおめでとうございます！２等です！');
         });
-
-        cutArea.addEventListener('touchstart', (e) => {
-            if (isRevealed) return;
-            isDragging = true;
-            startX = getClientX(e);
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging || isRevealed) return;
-            
-            const currentX = getClientX(e);
-            const deltaX = currentX - startX;
-            const rect = cutArea.getBoundingClientRect();
-            
-            // 進捗を計算（右方向のみ）
-            if (deltaX > 0) {
-                progress = Math.min(deltaX / rect.width * 100, 100);
-                cutProgress.style.width = progress + '%';
-                
-                // キラキラエフェクト
-                if (Math.random() > 0.7) {
-                    createSparkle(
-                        rect.left + (progress / 100) * rect.width,
-                        rect.top + Math.random() * rect.height
-                    );
-                }
-                
-                // 完全になぞったら
-                if (progress >= 95) {
-                    showResult();
-                }
-            }
-        });
-
-        document.addEventListener('touchmove', (e) => {
-            if (!isDragging || isRevealed) return;
-            
-            const currentX = getClientX(e);
-            const deltaX = currentX - startX;
-            const rect = cutArea.getBoundingClientRect();
-            
-            if (deltaX > 0) {
-                progress = Math.min(deltaX / rect.width * 100, 100);
-                cutProgress.style.width = progress + '%';
-                
-                if (Math.random() > 0.7) {
-                    createSparkle(
-                        rect.left + (progress / 100) * rect.width,
-                        rect.top + Math.random() * rect.height
-                    );
-                }
-                
-                if (progress >= 95) {
-                    showResult();
-                }
-            }
-        });
-
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
-
-        document.addEventListener('touchend', () => {
-            isDragging = false;
-        });
-
-        // ボタンクリックでリセット
-        pressButton.addEventListener('click', () => {
-            resultContainer.classList.remove('show');
-            blackout.classList.remove('active');
-            packTopHalf.classList.remove('cut');
-            cutFlash.classList.remove('active');
-            cutEffect.classList.remove('active');
-            cutProgress.style.width = '0%';
-            cutProgress.style.background = 'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 215, 0, 0.8) 30%, rgba(255, 255, 255, 1) 50%, rgba(255, 215, 0, 0.8) 70%, rgba(255, 255, 255, 0) 100%)';
-            progress = 0;
-            isRevealed = false;
-        });
-
-        // 初期化
-        createSnowflakes();
     </script>
 </body>
 </html>
+
