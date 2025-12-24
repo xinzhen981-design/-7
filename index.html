@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎄 クリスマスパック 🎄</title>
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
+    <title>🎄 みかちゃんのクリスマスパック 🎄</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
 
         body {
-            font-family: 'M PLUS Rounded 1c', sans-serif;
             min-height: 100vh;
+            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 30%, #1a472a 60%, #0d2818 100%);
+            font-family: 'Zen Maru Gothic', sans-serif;
             overflow: hidden;
-            background: linear-gradient(180deg, #1a0a2e 0%, #16213e 50%, #0f3460 100%);
+            position: relative;
         }
 
         /* 雪のエフェクト */
@@ -40,12 +40,16 @@
         }
 
         @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg); }
-            100% { transform: translateY(110vh) rotate(360deg); }
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+            }
         }
 
-        /* シーン1: パック表示 */
-        #scene-pack {
+        /* パック画面 */
+        .pack-screen {
             position: fixed;
             top: 0;
             left: 0;
@@ -56,856 +60,688 @@
             justify-content: center;
             align-items: center;
             z-index: 10;
+            transition: opacity 0.5s ease;
         }
 
+        .pack-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* タイトル */
+        .title {
+            color: #ffd700;
+            font-size: 2rem;
+            font-weight: 900;
+            text-shadow: 
+                0 0 10px #ffd700,
+                0 0 20px #ff6b6b,
+                2px 2px 0 #c41e3a;
+            margin-bottom: 30px;
+            animation: titleGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        /* パック本体 */
         .pack-container {
             position: relative;
-            cursor: pointer;
+            width: 280px;
+            height: 400px;
         }
 
         .pack {
-            width: 280px;
-            height: 380px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #c0392b 50%, #96281b 100%);
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                #c41e3a 0%, 
+                #a01830 20%,
+                #c41e3a 40%,
+                #8b1528 60%,
+                #c41e3a 80%,
+                #a01830 100%);
             border-radius: 20px;
             position: relative;
             box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.5),
-                inset 0 2px 10px rgba(255, 255, 255, 0.3);
+                0 10px 40px rgba(0,0,0,0.5),
+                inset 0 2px 10px rgba(255,255,255,0.2),
+                0 0 30px rgba(196, 30, 58, 0.5);
             overflow: hidden;
-            transition: transform 0.3s ease;
+            border: 4px solid #ffd700;
         }
 
-        .pack:hover {
-            transform: scale(1.02);
-        }
-
+        /* パックの装飾 */
         .pack::before {
             content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* リボン */
+        .ribbon-vertical {
             position: absolute;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
+            width: 50px;
             height: 100%;
-            background: linear-gradient(180deg, #ffd700 0%, #ffb347 100%);
-            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(90deg, #228b22, #32cd32, #228b22);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
         }
 
-        .pack::after {
-            content: '';
+        .ribbon-horizontal {
             position: absolute;
             top: 50%;
             left: 0;
             transform: translateY(-50%);
             width: 100%;
-            height: 60px;
-            background: linear-gradient(90deg, #ffd700 0%, #ffb347 100%);
-            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+            height: 50px;
+            background: linear-gradient(180deg, #228b22, #32cd32, #228b22);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
         }
 
         .ribbon-bow {
             position: absolute;
-            top: calc(50% - 50px);
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
             z-index: 5;
         }
 
-        .ribbon-bow::before,
-        .ribbon-bow::after {
-            content: '';
+        .bow-center {
             position: absolute;
-            width: 60px;
-            height: 40px;
-            background: #ffd700;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #ffd700, #ffaa00);
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ffd700;
+        }
+
+        .bow-loop {
+            position: absolute;
+            width: 40px;
+            height: 25px;
+            background: linear-gradient(135deg, #228b22, #32cd32);
             border-radius: 50%;
         }
 
-        .ribbon-bow::before {
-            left: -55px;
-            top: 10px;
+        .bow-loop:nth-child(1) {
+            top: 5px;
+            left: 0;
             transform: rotate(-30deg);
         }
 
-        .ribbon-bow::after {
-            right: -55px;
-            top: 10px;
+        .bow-loop:nth-child(2) {
+            top: 5px;
+            right: 0;
             transform: rotate(30deg);
         }
 
-        .ribbon-center {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: #ffed4a;
-            border-radius: 50%;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 0 20px rgba(255, 237, 74, 0.8);
+        .bow-loop:nth-child(3) {
+            bottom: 5px;
+            left: 10px;
+            transform: rotate(-150deg);
         }
 
-        .sparkle {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: white;
-            border-radius: 50%;
-            animation: sparkle 1.5s ease-in-out infinite;
+        .bow-loop:nth-child(4) {
+            bottom: 5px;
+            right: 10px;
+            transform: rotate(150deg);
         }
 
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
+        /* パックの装飾（星やハート） */
+        .decoration {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: twinkle 1.5s ease-in-out infinite;
+        }
+
+        .decoration:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .decoration:nth-child(2) { top: 15%; right: 15%; animation-delay: 0.3s; }
+        .decoration:nth-child(3) { bottom: 20%; left: 15%; animation-delay: 0.6s; }
+        .decoration:nth-child(4) { bottom: 15%; right: 10%; animation-delay: 0.9s; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
         }
 
         /* 切り取り線エリア */
         .cut-area {
             position: absolute;
-            top: 20px;
+            top: 0;
             left: 0;
             width: 100%;
-            height: 50px;
-            z-index: 20;
+            height: 80px;
+            background: linear-gradient(180deg, 
+                rgba(255,215,0,0.3) 0%,
+                rgba(255,215,0,0.1) 50%,
+                transparent 100%);
+            border-bottom: 4px dashed #ffd700;
             cursor: grab;
-        }
-
-        .cut-area:active {
-            cursor: grabbing;
-        }
-
-        .cut-line {
-            position: absolute;
-            top: 35px;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: repeating-linear-gradient(
-                90deg,
-                white 0px,
-                white 10px,
-                transparent 10px,
-                transparent 20px
-            );
             z-index: 10;
-        }
-
-        .cut-instruction {
-            position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 0.85rem;
-            color: #c0392b;
-            white-space: nowrap;
-            z-index: 21;
-            font-weight: 700;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        /* スライドガイド矢印 */
-        .slide-guide {
-            position: absolute;
-            top: 45px;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 22;
-            animation: slideHint 1.5s ease-in-out infinite;
-        }
-
-        .slide-guide .arrow {
-            font-size: 1.5rem;
-            color: #ffd700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-        }
-
-        .slide-guide .hand {
-            font-size: 2rem;
-            animation: handMove 1.5s ease-in-out infinite;
-        }
-
-        @keyframes slideHint {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        @keyframes handMove {
-            0%, 100% { transform: translateX(-30px); }
-            50% { transform: translateX(30px); }
-        }
-
-        /* スライド進捗バー */
-        .slide-progress {
-            position: absolute;
-            top: 75px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            overflow: hidden;
-            z-index: 22;
-        }
-
-        .slide-progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #ffd700, #ff6b6b);
-            border-radius: 4px;
-            transition: width 0.1s;
-        }
-
-        .pack-top {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 37px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #c0392b 100%);
-            border-radius: 20px 20px 0 0;
-            z-index: 9;
-        }
-
-        .pack.cutting .pack-top {
-            animation: cutTop 0.5s ease-out forwards;
-        }
-
-        @keyframes cutTop {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100px) rotate(-20deg); opacity: 0; }
-        }
-
-        .title {
-            color: #ffd700;
-            font-size: 2rem;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-            margin-bottom: 30px;
-            animation: glow 2s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
-            50% { text-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.5); }
-        }
-
-        /* 暗転 */
-        #blackout {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            z-index: 100;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .countdown {
-            font-size: 8rem;
-            color: white;
-            text-shadow: 0 0 50px rgba(255, 255, 255, 0.8);
-            animation: countPulse 1s ease-in-out;
-        }
-
-        @keyframes countPulse {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* シーン2: 2等演出 */
-        #scene-button {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, #1a0a2e 0%, #16213e 50%, #0f3460 100%);
-            z-index: 50;
-            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            transition: background 0.3s ease;
         }
 
-        /* 2等ボタン（銀色に光り輝く） */
-        .second-prize-btn {
-            width: 220px;
-            height: 220px;
-            background: linear-gradient(145deg, #f0f0f0, #c0c0c0, #a8a8a8);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2.8rem;
-            color: #333;
+        .cut-area:hover {
+            background: linear-gradient(180deg, 
+                rgba(255,215,0,0.5) 0%,
+                rgba(255,215,0,0.2) 50%,
+                transparent 100%);
+        }
+
+        .cut-area.dragging {
+            cursor: grabbing;
+            background: linear-gradient(180deg, 
+                rgba(255,100,100,0.6) 0%,
+                rgba(255,215,0,0.3) 50%,
+                transparent 100%);
+        }
+
+        .cut-instruction {
+            color: #fff;
+            font-size: 1.1rem;
             font-weight: 900;
-            box-shadow: 
-                0 0 60px rgba(192, 192, 192, 0.8),
-                0 0 120px rgba(192, 192, 192, 0.4),
-                0 10px 40px rgba(0, 0, 0, 0.5),
-                inset 0 5px 30px rgba(255, 255, 255, 0.8);
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.1s;
-            transform: scale(0);
-            animation: silverShine 2s ease-in-out infinite;
+            text-shadow: 
+                0 0 10px #ffd700,
+                0 0 20px rgba(255,215,0,0.8),
+                2px 2px 4px rgba(0,0,0,0.8);
+            animation: instructionPulse 1.5s ease-in-out infinite;
+            pointer-events: none;
         }
 
-        .second-prize-btn.show {
-            animation: prizeAppear 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards, silverShine 2s ease-in-out infinite 1s;
-        }
-
-        @keyframes prizeAppear {
-            0% { transform: scale(0) rotate(-180deg); }
-            60% { transform: scale(1.2) rotate(10deg); }
-            80% { transform: scale(0.9) rotate(-5deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
-        @keyframes silverShine {
+        @keyframes instructionPulse {
             0%, 100% { 
-                box-shadow: 
-                    0 0 60px rgba(192, 192, 192, 0.8),
-                    0 0 120px rgba(192, 192, 192, 0.4),
-                    0 10px 40px rgba(0, 0, 0, 0.5),
-                    inset 0 5px 30px rgba(255, 255, 255, 0.8);
+                transform: scale(1);
+                text-shadow: 0 0 10px #ffd700, 0 0 20px rgba(255,215,0,0.8), 2px 2px 4px rgba(0,0,0,0.8);
             }
             50% { 
-                box-shadow: 
-                    0 0 100px rgba(255, 255, 255, 1),
-                    0 0 200px rgba(192, 192, 192, 0.8),
-                    0 10px 40px rgba(0, 0, 0, 0.5),
-                    inset 0 5px 30px rgba(255, 255, 255, 1);
+                transform: scale(1.05);
+                text-shadow: 0 0 20px #ffd700, 0 0 40px rgba(255,215,0,1), 2px 2px 4px rgba(0,0,0,0.8);
             }
         }
 
-        .second-prize-btn:active {
-            transform: scale(0.95);
+        .cut-arrow {
+            color: #ffd700;
+            font-size: 1.5rem;
+            margin-top: 8px;
+            pointer-events: none;
+            animation: arrowMove 1s ease-in-out infinite;
+            text-shadow: 0 0 10px #ffd700;
         }
 
-        .crack-overlay {
+        @keyframes arrowMove {
+            0% { 
+                transform: translateX(-20px);
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateX(20px);
+                opacity: 0.3;
+            }
+        }
+
+        /* 手のアイコン */
+        .hand-guide {
             position: absolute;
-            top: 0;
+            font-size: 2.5rem;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            animation: handSwipe 2s ease-in-out infinite;
+            pointer-events: none;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+            z-index: 20;
+        }
+
+        @keyframes handSwipe {
+            0% {
+                left: 20px;
+                opacity: 1;
+            }
+            70% {
+                left: calc(100% - 60px);
+                opacity: 1;
+            }
+            85% {
+                opacity: 0;
+            }
+            100% {
+                left: 20px;
+                opacity: 0;
+            }
+        }
+
+        .hand-guide.hidden {
+            display: none;
+        }
+
+        /* 切れる演出 */
+        .cut-line {
+            position: absolute;
+            top: 76px;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 0;
+            height: 6px;
+            background: linear-gradient(90deg, 
+                #ff0000,
+                #ffd700,
+                #fff,
+                #ffd700,
+                #ff0000);
+            box-shadow: 
+                0 0 20px #ffd700, 
+                0 0 40px #fff,
+                0 0 60px #ff0000;
+            z-index: 15;
+            border-radius: 3px;
+        }
+
+        /* 切り取り進捗のスパーク */
+        .cut-spark {
+            position: absolute;
+            top: 73px;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #fff 0%, #ffd700 50%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
-            overflow: hidden;
-        }
-
-        .crack {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-        }
-
-        /* おや...テキスト */
-        .oya-text {
-            position: absolute;
-            top: 25%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 3.5rem;
-            color: #fff;
+            z-index: 16;
             opacity: 0;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+            transform: scale(0);
         }
 
-        .oya-text.show {
-            animation: oyaAppear 1.5s ease-out forwards;
+        .cut-spark.active {
+            opacity: 1;
+            transform: scale(1);
+            animation: sparkle 0.3s ease-out infinite;
         }
 
-        @keyframes oyaAppear {
-            0% { opacity: 0; transform: translateX(-50%) scale(0.5); }
-            100% { opacity: 1; transform: translateX(-50%) scale(1); }
+        @keyframes sparkle {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0.5; }
         }
 
-        /* サンタクロース */
-        .santa-container {
-            position: absolute;
-            bottom: 100px;
-            left: -200px;
-            transition: left 3s ease-out;
-        }
-
-        .santa-container.walking {
-            left: calc(50% + 140px);
-        }
-
-        .santa {
-            position: relative;
-            width: 120px;
-            height: 180px;
-        }
-
-        .santa-head {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 70px;
-            height: 70px;
-            background: #ffe4c4;
-            border-radius: 50%;
-        }
-
-        .santa-hat {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 40px solid transparent;
-            border-right: 40px solid transparent;
-            border-bottom: 60px solid #e74c3c;
-        }
-
-        .santa-hat::after {
-            content: '';
-            position: absolute;
-            top: 55px;
-            left: -50px;
-            width: 100px;
-            height: 15px;
-            background: white;
-            border-radius: 8px;
-        }
-
-        .santa-hat-ball {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 25px;
-            height: 25px;
-            background: white;
-            border-radius: 50%;
-        }
-
-        .santa-eye {
-            position: absolute;
-            width: 10px;
-            height: 12px;
-            background: #333;
-            border-radius: 50%;
-            top: 25px;
-        }
-
-        .santa-eye.left { left: 18px; }
-        .santa-eye.right { right: 18px; }
-
-        .santa-cheek {
-            position: absolute;
-            width: 15px;
-            height: 10px;
-            background: #ffb6c1;
-            border-radius: 50%;
-            top: 40px;
-        }
-
-        .santa-cheek.left { left: 5px; }
-        .santa-cheek.right { right: 5px; }
-
-        .santa-nose {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            background: #e74c3c;
-            border-radius: 50%;
-            top: 32px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .santa-beard {
+        /* 進捗バー */
+        .progress-container {
             position: absolute;
             bottom: -30px;
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
-            height: 50px;
-            background: white;
-            border-radius: 0 0 30px 30px;
-        }
-
-        .santa-mustache {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 15px;
-            background: white;
-            border-radius: 0 0 25px 25px;
-        }
-
-        .santa-body {
-            position: absolute;
-            top: 65px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 80px;
-            background: #e74c3c;
-            border-radius: 20px 20px 0 0;
-        }
-
-        .santa-belt {
-            position: absolute;
-            top: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 85px;
-            height: 15px;
-            background: #222;
-        }
-
-        .santa-belt::after {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 20px;
-            background: #ffd700;
-            border-radius: 3px;
-        }
-
-        .santa-leg {
-            position: absolute;
-            top: 140px;
-            width: 25px;
-            height: 35px;
-            background: #e74c3c;
-        }
-
-        .santa-leg.left { left: 25px; }
-        .santa-leg.right { right: 25px; }
-
-        .santa-boot {
-            position: absolute;
-            top: 165px;
-            width: 35px;
-            height: 20px;
-            background: #222;
-            border-radius: 10px;
-        }
-
-        .santa-boot.left { left: 18px; }
-        .santa-boot.right { right: 18px; }
-
-        .santa.walking {
-            animation: santaWalk 0.5s ease-in-out infinite;
-        }
-
-        @keyframes santaWalk {
-            0%, 100% { transform: translateY(0) rotate(-3deg); }
-            50% { transform: translateY(-10px) rotate(3deg); }
-        }
-
-        /* 吹き出し */
-        .speech-bubble {
-            position: absolute;
-            left: -220px;
-            top: -30px;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 20px;
-            font-size: 1rem;
-            color: #333;
-            font-weight: 700;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            width: 80%;
+            height: 8px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 4px;
+            overflow: hidden;
             opacity: 0;
-            transform: scale(0);
-            white-space: nowrap;
+            transition: opacity 0.3s ease;
         }
 
-        .speech-bubble::after {
-            content: '';
-            position: absolute;
-            right: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            border: 10px solid transparent;
-            border-left-color: white;
-        }
-
-        .speech-bubble.show {
-            animation: bubblePop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-        }
-
-        @keyframes bubblePop {
-            0% { opacity: 0; transform: scale(0); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        .tap-count {
-            position: absolute;
-            top: 180px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #ffd700;
-            font-size: 1.8rem;
-            opacity: 0;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-        }
-
-        .tap-count.visible {
+        .progress-container.show {
             opacity: 1;
         }
 
-        /* 1等ボタン（金色に光り輝く） */
-        #first-prize-overlay {
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ffd700, #ff6b6b, #ffd700);
+            border-radius: 4px;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px #ffd700;
+        }
+
+        .progress-text {
+            position: absolute;
+            bottom: -55px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffd700;
+            font-size: 0.9rem;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .progress-text.show {
+            opacity: 1;
+        }
+
+        /* 暗転画面 */
+        .blackout-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(0,0,0,0.9) 100%);
-            z-index: 200;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .first-prize-btn {
-            width: 280px;
-            height: 280px;
-            background: linear-gradient(145deg, #ffd700, #ffb347, #ff8c00);
-            border-radius: 50%;
+            background: #000;
+            z-index: 100;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 3rem;
-            color: white;
-            font-weight: 900;
-            box-shadow: 
-                0 0 80px rgba(255, 215, 0, 1),
-                0 0 150px rgba(255, 215, 0, 0.8),
-                0 0 250px rgba(255, 215, 0, 0.5),
-                0 15px 50px rgba(0, 0, 0, 0.5),
-                inset 0 5px 30px rgba(255, 255, 255, 0.5);
-            transform: scale(0);
-            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
-            animation: goldShine 1.5s ease-in-out infinite;
-            line-height: 1.2;
-        }
-
-        .first-prize-btn .sub-text {
-            font-size: 1.5rem;
-            margin-top: 5px;
-        }
-
-        .first-prize-btn.show {
-            animation: firstPrizePop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards, goldShine 1.5s ease-in-out infinite 0.8s;
-        }
-
-        @keyframes firstPrizePop {
-            0% { transform: scale(0) rotate(-180deg); }
-            60% { transform: scale(1.4) rotate(15deg); }
-            80% { transform: scale(0.9) rotate(-5deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
-        @keyframes goldShine {
-            0%, 100% { 
-                box-shadow: 
-                    0 0 80px rgba(255, 215, 0, 1),
-                    0 0 150px rgba(255, 215, 0, 0.8),
-                    0 0 250px rgba(255, 215, 0, 0.5),
-                    0 15px 50px rgba(0, 0, 0, 0.5),
-                    inset 0 5px 30px rgba(255, 255, 255, 0.5);
-            }
-            50% { 
-                box-shadow: 
-                    0 0 120px rgba(255, 255, 255, 1),
-                    0 0 200px rgba(255, 215, 0, 1),
-                    0 0 350px rgba(255, 215, 0, 0.8),
-                    0 15px 50px rgba(0, 0, 0, 0.5),
-                    inset 0 5px 50px rgba(255, 255, 255, 0.8);
-            }
-        }
-
-        .final-btn {
-            padding: 20px 40px;
-            font-size: 1.5rem;
-            background: linear-gradient(145deg, #ff69b4, #ff1493);
-            border: none;
-            border-radius: 50px;
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.5);
-            font-family: 'M PLUS Rounded 1c', sans-serif;
-            font-weight: 700;
-            transition: transform 0.3s, box-shadow 0.3s;
-            margin-top: 40px;
             opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
         }
 
-        .final-btn.show {
-            animation: fadeInUp 0.8s ease-out 0.5s forwards;
+        .blackout-screen.active {
+            opacity: 1;
+            pointer-events: all;
         }
 
-        @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+        /* カウントダウン */
+        .countdown {
+            color: #ffd700;
+            font-size: 8rem;
+            font-weight: 900;
+            text-shadow: 
+                0 0 30px #ffd700,
+                0 0 60px #ff6b6b,
+                0 0 90px #c41e3a;
+            opacity: 0;
+            transform: scale(2);
+            transition: all 0.5s ease;
         }
 
-        .final-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(255, 20, 147, 0.7);
+        .countdown.show {
+            opacity: 1;
+            transform: scale(1);
         }
 
-        /* 紙吹雪 */
+        .countdown.hide {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        /* 結果画面 */
+        .result-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #2d1b4e 0%, #1a0f2e 50%, #0d0618 100%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+
+        .result-screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* 紙吹雪エフェクト */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 250;
+        }
+
         .confetti {
             position: absolute;
-            animation: confettiFall 3s ease-out forwards;
+            width: 10px;
+            height: 10px;
+            animation: confetti-fall 3s linear infinite;
         }
 
-        @keyframes confettiFall {
-            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
         }
 
-        /* 光のバースト */
-        .light-burst {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, rgba(255,215,0,1) 0%, rgba(255,255,255,0) 70%);
-            border-radius: 50%;
+        /* 結果テキスト */
+        .result-badge {
+            position: relative;
+            padding: 30px 80px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00, #ffd700);
+            border-radius: 20px;
+            box-shadow: 
+                0 0 50px rgba(255, 215, 0, 0.8),
+                0 0 100px rgba(255, 215, 0, 0.4),
+                inset 0 2px 10px rgba(255,255,255,0.5);
+            animation: resultPulse 2s ease-in-out infinite;
+            transform: scale(0);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .result-badge.show {
+            transform: scale(1);
+        }
+
+        @keyframes resultPulse {
+            0%, 100% { box-shadow: 0 0 50px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 0 80px rgba(255, 215, 0, 1), 0 0 150px rgba(255, 215, 0, 0.6); }
+        }
+
+        .result-text {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #c41e3a;
+            text-shadow: 
+                2px 2px 0 #fff,
+                4px 4px 0 rgba(196, 30, 58, 0.3);
+        }
+
+        /* ボタン */
+        .action-button {
+            margin-top: 50px;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Zen Maru Gothic', sans-serif;
+            color: #fff;
+            background: linear-gradient(135deg, #c41e3a, #8b1528);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 
+                0 8px 30px rgba(196, 30, 58, 0.5),
+                0 0 20px rgba(196, 30, 58, 0.3);
+            transform: scale(0);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-button.show {
+            transform: scale(1);
+            animation: buttonFloat 2s ease-in-out infinite;
+        }
+
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255,255,255,0.3) 50%,
+                transparent 70%
+            );
+            transform: rotate(45deg);
+            animation: shine 3s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        @keyframes buttonFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+
+        .action-button:hover {
+            background: linear-gradient(135deg, #d42a4a, #a01830);
+            box-shadow: 
+                0 12px 40px rgba(196, 30, 58, 0.7),
+                0 0 30px rgba(196, 30, 58, 0.5);
+        }
+
+        .action-button:active {
+            transform: scale(0.95);
+        }
+
+        /* 星の装飾（結果画面） */
+        .star-decoration {
+            position: absolute;
+            font-size: 2rem;
+            animation: starFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes starFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* 光の筋エフェクト */
+        .light-rays {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(255,215,0,0.1) 10deg,
+                transparent 20deg,
+                transparent 30deg,
+                rgba(255,215,0,0.1) 40deg,
+                transparent 50deg,
+                transparent 60deg,
+                rgba(255,215,0,0.1) 70deg,
+                transparent 80deg,
+                transparent 90deg
+            );
+            animation: raysSpin 20s linear infinite;
             pointer-events: none;
-            z-index: 199;
         }
 
-        .light-burst.show {
-            animation: burst 0.8s ease-out forwards;
-        }
-
-        @keyframes burst {
-            0% { width: 0; height: 0; opacity: 1; }
-            100% { width: 200vw; height: 200vw; opacity: 0; }
+        @keyframes raysSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- 雪 -->
+    <!-- 雪のエフェクト -->
     <div class="snowflakes" id="snowflakes"></div>
 
-    <!-- シーン1: パック -->
-    <div id="scene-pack">
+    <!-- パック画面 -->
+    <div class="pack-screen" id="packScreen">
         <h1 class="title">🎄 クリスマスパック 🎄</h1>
+        
         <div class="pack-container">
-            <div class="pack" id="pack">
-                <div class="pack-top"></div>
-                <div class="cut-line"></div>
-                <div class="cut-area" id="cut-area">
-                    <div class="cut-instruction">👆 横になぞったら切れるよ！</div>
-                    <div class="slide-guide">
-                        <span class="arrow">◀</span>
-                        <span class="hand">👆</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                </div>
-                <div class="slide-progress">
-                    <div class="slide-progress-bar" id="slide-progress-bar"></div>
-                </div>
+            <div class="pack">
+                <!-- 装飾 -->
+                <span class="decoration">⭐</span>
+                <span class="decoration">❤️</span>
+                <span class="decoration">🎄</span>
+                <span class="decoration">✨</span>
+                
+                <!-- リボン -->
+                <div class="ribbon-vertical"></div>
+                <div class="ribbon-horizontal"></div>
                 <div class="ribbon-bow">
-                    <div class="ribbon-center"></div>
+                    <div class="bow-loop"></div>
+                    <div class="bow-loop"></div>
+                    <div class="bow-loop"></div>
+                    <div class="bow-loop"></div>
+                    <div class="bow-center"></div>
                 </div>
-                <div class="sparkle" style="top: 25%; left: 20%; animation-delay: 0s;"></div>
-                <div class="sparkle" style="top: 35%; right: 15%; animation-delay: 0.5s;"></div>
-                <div class="sparkle" style="bottom: 25%; left: 25%; animation-delay: 1s;"></div>
-                <div class="sparkle" style="bottom: 35%; right: 20%; animation-delay: 1.5s;"></div>
+                
+                <!-- 切り取りエリア -->
+                <div class="cut-area" id="cutArea">
+                    <span class="cut-instruction">👉 横になぞったら切れるよ！ 👈</span>
+                    <span class="cut-arrow">→ → → → → → →</span>
+                    <span class="hand-guide" id="handGuide">👆</span>
+                    
+                    <!-- 進捗表示 -->
+                    <div class="progress-container" id="progressContainer">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">なぞり中...</span>
+                </div>
+                
+                <!-- 切れる線 -->
+                <div class="cut-line" id="cutLine"></div>
+                <div class="cut-spark" id="cutSpark"></div>
             </div>
         </div>
     </div>
 
-    <!-- 暗転・カウントダウン -->
-    <div id="blackout">
+    <!-- 暗転画面 -->
+    <div class="blackout-screen" id="blackoutScreen">
         <div class="countdown" id="countdown"></div>
     </div>
 
-    <!-- シーン2: 2等演出 -->
-    <div id="scene-button">
-        <div class="oya-text" id="oya-text">おや…？</div>
-        <div class="tap-count" id="tap-count"></div>
-
-        <div class="second-prize-btn" id="second-prize-btn">
-            ２等！！！
-            <div class="crack-overlay" id="crack-overlay"></div>
+    <!-- 結果画面 -->
+    <div class="result-screen" id="resultScreen">
+        <div class="light-rays"></div>
+        <div class="confetti-container" id="confettiContainer"></div>
+        
+        <div class="result-badge" id="resultBadge">
+            <span class="result-text">２等</span>
         </div>
-
-        <!-- サンタクロース -->
-        <div class="santa-container" id="santa-container">
-            <div class="speech-bubble" id="speech-bubble">
-                🎅 ２等のボタンを<br>連打するのじゃ！
-            </div>
-            <div class="santa" id="santa">
-                <div class="santa-head">
-                    <div class="santa-hat">
-                        <div class="santa-hat-ball"></div>
-                    </div>
-                    <div class="santa-eye left"></div>
-                    <div class="santa-eye right"></div>
-                    <div class="santa-cheek left"></div>
-                    <div class="santa-cheek right"></div>
-                    <div class="santa-nose"></div>
-                    <div class="santa-mustache"></div>
-                    <div class="santa-beard"></div>
-                </div>
-                <div class="santa-body"></div>
-                <div class="santa-belt"></div>
-                <div class="santa-leg left"></div>
-                <div class="santa-leg right"></div>
-                <div class="santa-boot left"></div>
-                <div class="santa-boot right"></div>
-            </div>
-        </div>
+        
+        <button class="action-button" id="actionButton">
+            ここを押してね♡
+        </button>
     </div>
-
-    <!-- 1等フィナーレ -->
-    <div id="first-prize-overlay">
-        <div class="first-prize-btn" id="first-prize-btn">
-            １等！！
-            <span class="sub-text">おめでとう♡</span>
-        </div>
-        <button class="final-btn" id="final-btn">ここを押してね♡</button>
-    </div>
-
-    <!-- 光のバースト -->
-    <div class="light-burst" id="light-burst"></div>
 
     <script>
         // 雪を生成
         function createSnowflakes() {
             const container = document.getElementById('snowflakes');
-            const snowflakeChars = ['❄', '❅', '❆', '✻', '✼'];
+            const snowflakeChars = ['❄', '❅', '❆', '✧', '✦'];
             
             for (let i = 0; i < 50; i++) {
                 const snowflake = document.createElement('div');
                 snowflake.className = 'snowflake';
                 snowflake.textContent = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
                 snowflake.style.left = Math.random() * 100 + '%';
-                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                snowflake.style.animationDuration = (Math.random() * 5 + 5) + 's';
                 snowflake.style.animationDelay = Math.random() * 5 + 's';
                 snowflake.style.fontSize = (Math.random() * 1 + 0.5) + 'rem';
                 container.appendChild(snowflake);
@@ -913,251 +749,204 @@
         }
         createSnowflakes();
 
-        // スライド検出（より分かりやすく）
-        let startX = 0;
+        // 切り取り機能
+        const cutArea = document.getElementById('cutArea');
+        const cutLine = document.getElementById('cutLine');
+        const cutSpark = document.getElementById('cutSpark');
+        const handGuide = document.getElementById('handGuide');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const packScreen = document.getElementById('packScreen');
+        const blackoutScreen = document.getElementById('blackoutScreen');
+        const countdown = document.getElementById('countdown');
+        const resultScreen = document.getElementById('resultScreen');
+        const resultBadge = document.getElementById('resultBadge');
+        const actionButton = document.getElementById('actionButton');
+
         let isDragging = false;
-        let totalDistance = 0;
-        const requiredDistance = 150;
-        let hasSwiped = false;
-        
-        const cutArea = document.getElementById('cut-area');
-        const pack = document.getElementById('pack');
-        const progressBar = document.getElementById('slide-progress-bar');
+        let startX = 0;
+        let cutProgress = 0;
+        let isCut = false;
 
-        cutArea.addEventListener('mousedown', startDrag);
-        cutArea.addEventListener('touchstart', startDrag);
-        document.addEventListener('mousemove', onDrag);
-        document.addEventListener('touchmove', onDrag);
-        document.addEventListener('mouseup', endDrag);
-        document.addEventListener('touchend', endDrag);
-
-        function startDrag(e) {
-            if (hasSwiped) return;
+        function handleStart(e) {
+            if (isCut) return;
             isDragging = true;
-            startX = e.clientX || e.touches[0].clientX;
-            totalDistance = 0;
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            startX = clientX;
+            cutProgress = 0;
+            
+            // ドラッグ開始のビジュアルフィードバック
+            cutArea.classList.add('dragging');
+            handGuide.classList.add('hidden');
+            progressContainer.classList.add('show');
+            progressText.classList.add('show');
+            cutSpark.classList.add('active');
         }
 
-        function onDrag(e) {
-            if (!isDragging || hasSwiped) return;
+        function handleMove(e) {
+            if (!isDragging || isCut) return;
             
-            const currentX = e.clientX || (e.touches && e.touches[0].clientX);
-            if (!currentX) return;
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const deltaX = clientX - startX;
             
-            const distance = Math.abs(currentX - startX);
-            totalDistance = Math.max(totalDistance, distance);
-            
-            // 進捗バーを更新
-            const progress = Math.min((totalDistance / requiredDistance) * 100, 100);
-            progressBar.style.width = progress + '%';
-            
-            if (totalDistance >= requiredDistance) {
-                cutPack();
-            }
-        }
-
-        function endDrag() {
-            isDragging = false;
-            if (!hasSwiped) {
-                progressBar.style.width = '0%';
-            }
-        }
-
-        function cutPack() {
-            hasSwiped = true;
-            isDragging = false;
-            progressBar.style.width = '100%';
-            pack.classList.add('cutting');
-            
-            setTimeout(() => {
-                document.getElementById('scene-pack').style.display = 'none';
-                startBlackout();
-            }, 600);
-        }
-
-        // 暗転とカウントダウン
-        function startBlackout() {
-            const blackout = document.getElementById('blackout');
-            const countdown = document.getElementById('countdown');
-            blackout.style.display = 'flex';
-            
-            let count = 5;
-            
-            function showCount() {
-                countdown.textContent = count;
-                countdown.style.animation = 'none';
-                countdown.offsetHeight;
-                countdown.style.animation = 'countPulse 1s ease-in-out';
+            // 右方向へのドラッグのみ
+            if (deltaX > 0) {
+                cutProgress = Math.min(deltaX / 200, 1);
+                cutLine.style.width = (cutProgress * 100) + '%';
+                progressBar.style.width = (cutProgress * 100) + '%';
                 
-                if (count > 0) {
-                    count--;
-                    setTimeout(showCount, 1000);
+                // スパークの位置を更新
+                const cutLineRect = cutLine.getBoundingClientRect();
+                const packRect = cutArea.parentElement.getBoundingClientRect();
+                cutSpark.style.left = (cutProgress * 100) + '%';
+                
+                // 進捗テキストを更新
+                const percent = Math.round(cutProgress * 100);
+                if (percent < 30) {
+                    progressText.textContent = 'もっと右へ！→→→';
+                } else if (percent < 60) {
+                    progressText.textContent = 'いい感じ！✨';
+                } else if (percent < 90) {
+                    progressText.textContent = 'あと少し！🎄';
                 } else {
-                    setTimeout(() => {
-                        blackout.style.display = 'none';
-                        showPrizeScene();
-                    }, 1000);
+                    progressText.textContent = '切れる！！🎉';
+                }
+                
+                // 振動エフェクト（モバイル）
+                if (navigator.vibrate && cutProgress > 0.9) {
+                    navigator.vibrate(50);
+                }
+                
+                // 切り取り完了
+                if (cutProgress >= 1) {
+                    completeCut();
                 }
             }
-            
-            setTimeout(showCount, 500);
         }
 
-        // シーン2
-        let tapCount = 0;
-        const maxTaps = 20;
-        let canTap = false;
+        function handleEnd() {
+            if (isCut) return;
+            isDragging = false;
+            cutArea.classList.remove('dragging');
+            
+            // 途中で離した場合はリセット
+            if (cutProgress < 1) {
+                cutLine.style.width = '0';
+                progressBar.style.width = '0';
+                cutProgress = 0;
+                progressContainer.classList.remove('show');
+                progressText.classList.remove('show');
+                cutSpark.classList.remove('active');
+                handGuide.classList.remove('hidden');
+            }
+        }
 
-        function showPrizeScene() {
-            const scene = document.getElementById('scene-button');
-            const btn = document.getElementById('second-prize-btn');
+        function completeCut() {
+            isCut = true;
+            isDragging = false;
             
-            scene.style.display = 'flex';
+            // 切れる効果音的な演出（画面を一瞬震わせる）
+            document.body.style.animation = 'none';
+            document.body.offsetHeight; // リフロー
             
-            // 2等ボタンが銀色に光り輝いて出現
+            // 少し遅延してから暗転
             setTimeout(() => {
-                btn.classList.add('show');
+                packScreen.classList.add('hidden');
+                blackoutScreen.classList.add('active');
                 
-                // しばらくして「おや...？」
-                setTimeout(() => {
-                    const oyaText = document.getElementById('oya-text');
-                    oyaText.classList.add('show');
-                    
-                    // サンタがてくてく歩いてくる
-                    setTimeout(() => {
-                        const santaContainer = document.getElementById('santa-container');
-                        const santa = document.getElementById('santa');
-                        
-                        santa.classList.add('walking');
-                        santaContainer.classList.add('walking');
-                        
-                        // 歩き終わったらボタンの横に止まる
-                        setTimeout(() => {
-                            santa.classList.remove('walking');
-                            
-                            // 吹き出しを出す
-                            setTimeout(() => {
-                                oyaText.style.transition = 'opacity 0.5s';
-                                oyaText.style.opacity = '0';
-                                
-                                document.getElementById('speech-bubble').classList.add('show');
-                                document.getElementById('tap-count').classList.add('visible');
-                                updateTapCount();
-                                canTap = true;
-                            }, 500);
-                        }, 3000);
-                    }, 1500);
-                }, 2500);
+                // カウントダウン開始
+                startCountdown();
             }, 500);
         }
 
-        function updateTapCount() {
-            document.getElementById('tap-count').textContent = `${tapCount} / ${maxTaps}`;
-        }
+        // イベントリスナー
+        cutArea.addEventListener('mousedown', handleStart);
+        cutArea.addEventListener('touchstart', handleStart);
+        document.addEventListener('mousemove', handleMove);
+        document.addEventListener('touchmove', handleMove);
+        document.addEventListener('mouseup', handleEnd);
+        document.addEventListener('touchend', handleEnd);
 
-        // 2等ボタンをタップ
-        const secondPrizeBtn = document.getElementById('second-prize-btn');
-        secondPrizeBtn.addEventListener('click', handleTap);
-        secondPrizeBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            handleTap();
-        });
-
-        function handleTap() {
-            if (!canTap || tapCount >= maxTaps) return;
+        // カウントダウン
+        function startCountdown() {
+            const numbers = ['５', '４', '３', '２', '１', '０'];
+            let index = 0;
             
-            tapCount++;
-            updateTapCount();
-            
-            // ヒビを追加
-            addCrack();
-            
-            // ボタンを揺らす
-            const btn = document.getElementById('second-prize-btn');
-            btn.style.transform = `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) scale(1)`;
-            setTimeout(() => {
-                btn.style.transform = 'translate(0, 0) scale(1)';
-            }, 80);
-            
-            if (tapCount >= maxTaps) {
-                canTap = false;
-                setTimeout(showFirstPrize, 300);
+            function showNumber() {
+                if (index < numbers.length) {
+                    countdown.textContent = numbers[index];
+                    countdown.classList.remove('hide');
+                    countdown.classList.add('show');
+                    
+                    setTimeout(() => {
+                        countdown.classList.remove('show');
+                        countdown.classList.add('hide');
+                        
+                        setTimeout(() => {
+                            index++;
+                            if (index < numbers.length) {
+                                showNumber();
+                            } else {
+                                // カウントダウン終了
+                                setTimeout(() => {
+                                    showResult();
+                                }, 500);
+                            }
+                        }, 300);
+                    }, 700);
+                }
             }
+            
+            setTimeout(showNumber, 500);
         }
 
-        function addCrack() {
-            const overlay = document.getElementById('crack-overlay');
+        // 結果表示
+        function showResult() {
+            blackoutScreen.classList.remove('active');
+            resultScreen.classList.add('active');
             
-            // 複数のヒビを追加
-            for (let i = 0; i < 2; i++) {
-                const crack = document.createElement('div');
-                crack.className = 'crack';
-                
-                const angle = Math.random() * 360;
-                const length = 40 + Math.random() * 80;
-                const width = 2 + Math.random() * 4;
-                const centerX = 110;
-                const centerY = 110;
-                const offsetX = (Math.random() - 0.5) * 120;
-                const offsetY = (Math.random() - 0.5) * 120;
-                
-                crack.style.cssText = `
-                    left: ${centerX + offsetX}px;
-                    top: ${centerY + offsetY}px;
-                    width: ${length}px;
-                    height: ${width}px;
-                    transform: rotate(${angle}deg);
-                    background: linear-gradient(90deg, transparent, rgba(30,30,30,0.9), transparent);
-                `;
-                
-                overlay.appendChild(crack);
-            }
-        }
-
-        function showFirstPrize() {
-            // 光のバースト
-            document.getElementById('light-burst').classList.add('show');
+            // 紙吹雪を生成
+            createConfetti();
             
-            // 少し遅れて1等画面表示
+            // 結果バッジ表示
             setTimeout(() => {
-                document.getElementById('scene-button').style.display = 'none';
-                const overlay = document.getElementById('first-prize-overlay');
-                overlay.style.display = 'flex';
-                
-                // 1等ボタンを勢いよく出現
-                setTimeout(() => {
-                    document.getElementById('first-prize-btn').classList.add('show');
-                    document.getElementById('final-btn').classList.add('show');
-                    createConfetti();
-                }, 200);
-            }, 400);
+                resultBadge.classList.add('show');
+            }, 300);
+            
+            // ボタン表示
+            setTimeout(() => {
+                actionButton.classList.add('show');
+            }, 1000);
         }
 
+        // 紙吹雪
         function createConfetti() {
-            const colors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3', '#ff69b4', '#ffd700', '#ffffff'];
-            const overlay = document.getElementById('first-prize-overlay');
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#ffd700', '#c41e3a', '#228b22', '#ff69b4', '#00bfff', '#ff6347'];
             
-            for (let i = 0; i < 200; i++) {
+            for (let i = 0; i < 100; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
-                confetti.style.cssText = `
-                    left: ${Math.random() * 100}%;
-                    top: -20px;
-                    background: ${colors[Math.floor(Math.random() * colors.length)]};
-                    width: ${5 + Math.random() * 15}px;
-                    height: ${5 + Math.random() * 15}px;
-                    border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
-                    animation-delay: ${Math.random() * 3}s;
-                    animation-duration: ${2 + Math.random() * 3}s;
-                `;
-                overlay.appendChild(confetti);
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                if (Math.random() > 0.5) {
+                    confetti.style.borderRadius = '50%';
+                }
+                
+                container.appendChild(confetti);
             }
         }
 
-        // 最終ボタン
-        document.getElementById('final-btn').addEventListener('click', () => {
-            alert('🎄 メリークリスマス！ 🎄\n\n１等おめでとうございます！\n素敵なクリスマスをお過ごしください♡');
+        // ボタンクリック
+        actionButton.addEventListener('click', () => {
+            alert('🎄 メリークリスマス！ 🎄\n\nおめでとうございます！２等です！');
         });
     </script>
 </body>
 </html>
+
