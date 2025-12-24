@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎄 みかちゃんのクリスマスパック 🎄</title>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>みかちゃんのクリスマスパック</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,13 +16,13 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 30%, #1a472a 60%, #0d2818 100%);
-            font-family: 'Zen Maru Gothic', sans-serif;
-            overflow: hidden;
+            background: linear-gradient(180deg, #0a1628 0%, #1a2f4a 50%, #2d1810 100%);
+            font-family: 'Kaisei Decol', serif;
+            overflow-x: hidden;
             position: relative;
         }
 
-        /* 雪のエフェクト */
+        /* 雪のアニメーション */
         .snowflakes {
             position: fixed;
             top: 0;
@@ -29,134 +31,225 @@
             height: 100%;
             pointer-events: none;
             z-index: 1;
+            overflow: hidden;
         }
 
         .snowflake {
             position: absolute;
-            color: white;
+            top: -10px;
+            color: #fff;
             font-size: 1rem;
             animation: fall linear infinite;
             opacity: 0.8;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
         }
 
         @keyframes fall {
             0% {
-                transform: translateY(-10vh) rotate(0deg);
+                transform: translateY(-10px) rotate(0deg);
             }
             100% {
-                transform: translateY(110vh) rotate(360deg);
+                transform: translateY(100vh) rotate(360deg);
             }
         }
 
-        /* パック画面 */
-        .pack-screen {
+        /* 星のきらめき */
+        .stars {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .pack-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
+        .star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* コンテナ */
+        .container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
         }
 
         /* タイトル */
+        .title-container {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
         .title {
-            color: #ffd700;
+            font-family: 'Fredoka', 'Kaisei Decol', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 25%, #ffd700 50%, #ff6b6b 75%, #ffd700 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shine 3s linear infinite;
+            text-shadow: none;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #90ee90;
+            margin-top: 10px;
+            text-shadow: 0 0 10px rgba(144, 238, 144, 0.5);
+        }
+
+        /* デコレーション */
+        .decoration {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
             font-size: 2rem;
-            font-weight: 900;
-            text-shadow: 
-                0 0 10px #ffd700,
-                0 0 20px #ff6b6b,
-                2px 2px 0 #c41e3a;
-            margin-bottom: 30px;
-            animation: titleGlow 2s ease-in-out infinite;
         }
 
-        @keyframes titleGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.3); }
+        .decoration span {
+            animation: bounce 1s ease-in-out infinite;
         }
 
-        /* パック本体 */
-        .pack-container {
-            position: relative;
-            width: 280px;
-            height: 400px;
+        .decoration span:nth-child(2) { animation-delay: 0.1s; }
+        .decoration span:nth-child(3) { animation-delay: 0.2s; }
+        .decoration span:nth-child(4) { animation-delay: 0.3s; }
+        .decoration span:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
+        /* パックグリッド */
+        .packs-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .pack-row {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        /* パックカード */
         .pack {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, 
-                #c41e3a 0%, 
-                #a01830 20%,
-                #c41e3a 40%,
-                #8b1528 60%,
-                #c41e3a 80%,
-                #a01830 100%);
-            border-radius: 20px;
+            width: 140px;
+            height: 200px;
+            background: linear-gradient(145deg, #c41e3a 0%, #8b0000 50%, #c41e3a 100%);
+            border-radius: 15px;
             position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
             box-shadow: 
-                0 10px 40px rgba(0,0,0,0.5),
-                inset 0 2px 10px rgba(255,255,255,0.2),
-                0 0 30px rgba(196, 30, 58, 0.5);
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                inset 0 2px 10px rgba(255, 255, 255, 0.2),
+                0 0 20px rgba(255, 215, 0, 0.3);
+            border: 3px solid #ffd700;
             overflow: hidden;
-            border: 4px solid #ffd700;
         }
 
-        /* パックの装飾 */
         .pack::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, transparent 70%);
-            pointer-events: none;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
         }
 
-        /* リボン */
-        .ribbon-vertical {
+        .pack:hover::before {
+            left: 100%;
+        }
+
+        .pack:hover {
+            transform: translateY(-15px) scale(1.05) rotateY(5deg);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.6),
+                inset 0 2px 15px rgba(255, 255, 255, 0.3),
+                0 0 40px rgba(255, 215, 0, 0.6);
+        }
+
+        .pack:active {
+            transform: translateY(-5px) scale(0.98);
+        }
+
+        /* パックの装飾 */
+        .pack-inner {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .pack-ribbon {
             position: absolute;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 50px;
+            width: 30px;
             height: 100%;
-            background: linear-gradient(90deg, #228b22, #32cd32, #228b22);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+            background: linear-gradient(90deg, #228b22 0%, #32cd32 50%, #228b22 100%);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
         }
 
-        .ribbon-horizontal {
+        .pack-ribbon-h {
             position: absolute;
             top: 50%;
             left: 0;
             transform: translateY(-50%);
             width: 100%;
-            height: 50px;
-            background: linear-gradient(180deg, #228b22, #32cd32, #228b22);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+            height: 30px;
+            background: linear-gradient(180deg, #228b22 0%, #32cd32 50%, #228b22 100%);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
         }
 
-        .ribbon-bow {
+        .pack-bow {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            z-index: 5;
+            width: 60px;
+            height: 60px;
+            z-index: 2;
         }
 
         .bow-center {
@@ -164,577 +257,518 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 30px;
-            height: 30px;
-            background: radial-gradient(circle, #ffd700, #ffaa00);
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #ffd700 0%, #daa520 100%);
             border-radius: 50%;
-            box-shadow: 0 0 15px #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            z-index: 3;
         }
 
         .bow-loop {
             position: absolute;
-            width: 40px;
-            height: 25px;
-            background: linear-gradient(135deg, #228b22, #32cd32);
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(135deg, #ffd700 0%, #daa520 100%);
             border-radius: 50%;
         }
 
-        .bow-loop:nth-child(1) {
-            top: 5px;
+        .bow-loop-left {
+            top: 50%;
             left: 0;
-            transform: rotate(-30deg);
+            transform: translateY(-50%) rotate(-30deg);
         }
 
-        .bow-loop:nth-child(2) {
-            top: 5px;
+        .bow-loop-right {
+            top: 50%;
             right: 0;
-            transform: rotate(30deg);
+            transform: translateY(-50%) rotate(30deg);
         }
 
-        .bow-loop:nth-child(3) {
-            bottom: 5px;
-            left: 10px;
-            transform: rotate(-150deg);
-        }
-
-        .bow-loop:nth-child(4) {
-            bottom: 5px;
-            right: 10px;
-            transform: rotate(150deg);
-        }
-
-        /* パックの装飾（星やハート） */
-        .decoration {
+        /* パック番号 */
+        .pack-number {
             position: absolute;
-            font-size: 1.5rem;
-            animation: twinkle 1.5s ease-in-out infinite;
-        }
-
-        .decoration:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-        .decoration:nth-child(2) { top: 15%; right: 15%; animation-delay: 0.3s; }
-        .decoration:nth-child(3) { bottom: 20%; left: 15%; animation-delay: 0.6s; }
-        .decoration:nth-child(4) { bottom: 15%; right: 10%; animation-delay: 0.9s; }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        /* 切り取り線エリア */
-        .cut-area {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            background: linear-gradient(180deg, 
-                rgba(255,215,0,0.3) 0%,
-                rgba(255,215,0,0.1) 50%,
-                transparent 100%);
-            border-bottom: 4px dashed #ffd700;
-            cursor: grab;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: background 0.3s ease;
-        }
-
-        .cut-area:hover {
-            background: linear-gradient(180deg, 
-                rgba(255,215,0,0.5) 0%,
-                rgba(255,215,0,0.2) 50%,
-                transparent 100%);
-        }
-
-        .cut-area.dragging {
-            cursor: grabbing;
-            background: linear-gradient(180deg, 
-                rgba(255,100,100,0.6) 0%,
-                rgba(255,215,0,0.3) 50%,
-                transparent 100%);
-        }
-
-        .cut-instruction {
-            color: #fff;
-            font-size: 1.1rem;
-            font-weight: 900;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
             text-shadow: 
-                0 0 10px #ffd700,
-                0 0 20px rgba(255,215,0,0.8),
-                2px 2px 4px rgba(0,0,0,0.8);
-            animation: instructionPulse 1.5s ease-in-out infinite;
+                0 0 10px rgba(255, 255, 255, 0.8),
+                2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        /* クリスマスツリーの装飾（背景） */
+        .tree-left, .tree-right {
+            position: fixed;
+            bottom: 0;
+            width: 150px;
+            height: 300px;
+            z-index: 1;
             pointer-events: none;
         }
 
-        @keyframes instructionPulse {
+        .tree-left {
+            left: 20px;
+        }
+
+        .tree-right {
+            right: 20px;
+        }
+
+        .tree-shape {
+            width: 0;
+            height: 0;
+            border-left: 75px solid transparent;
+            border-right: 75px solid transparent;
+            border-bottom: 120px solid #0d5c0d;
+            position: absolute;
+            filter: drop-shadow(0 0 10px rgba(0, 100, 0, 0.5));
+        }
+
+        .tree-shape:nth-child(1) {
+            bottom: 160px;
+        }
+
+        .tree-shape:nth-child(2) {
+            bottom: 100px;
+            border-left-width: 85px;
+            border-right-width: 85px;
+            border-bottom-width: 130px;
+            left: -10px;
+        }
+
+        .tree-shape:nth-child(3) {
+            bottom: 30px;
+            border-left-width: 95px;
+            border-right-width: 95px;
+            border-bottom-width: 140px;
+            left: -20px;
+        }
+
+        .tree-trunk {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 50px;
+            background: linear-gradient(90deg, #4a3728, #6b4423, #4a3728);
+            border-radius: 0 0 5px 5px;
+        }
+
+        .tree-star {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: starGlow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes starGlow {
             0%, 100% { 
-                transform: scale(1);
-                text-shadow: 0 0 10px #ffd700, 0 0 20px rgba(255,215,0,0.8), 2px 2px 4px rgba(0,0,0,0.8);
+                filter: drop-shadow(0 0 10px #ffd700);
+                transform: translateX(-50%) scale(1);
             }
             50% { 
-                transform: scale(1.05);
-                text-shadow: 0 0 20px #ffd700, 0 0 40px rgba(255,215,0,1), 2px 2px 4px rgba(0,0,0,0.8);
+                filter: drop-shadow(0 0 20px #ffd700);
+                transform: translateX(-50%) scale(1.2);
             }
         }
 
-        .cut-arrow {
-            color: #ffd700;
-            font-size: 1.5rem;
-            margin-top: 8px;
-            pointer-events: none;
-            animation: arrowMove 1s ease-in-out infinite;
-            text-shadow: 0 0 10px #ffd700;
-        }
-
-        @keyframes arrowMove {
-            0% { 
-                transform: translateX(-20px);
-                opacity: 0.3;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% { 
-                transform: translateX(20px);
-                opacity: 0.3;
-            }
-        }
-
-        /* 手のアイコン */
-        .hand-guide {
+        /* オーナメント */
+        .ornament {
             position: absolute;
-            font-size: 2.5rem;
-            top: 50%;
-            left: 20px;
-            transform: translateY(-50%);
-            animation: handSwipe 2s ease-in-out infinite;
-            pointer-events: none;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
-            z-index: 20;
-        }
-
-        @keyframes handSwipe {
-            0% {
-                left: 20px;
-                opacity: 1;
-            }
-            70% {
-                left: calc(100% - 60px);
-                opacity: 1;
-            }
-            85% {
-                opacity: 0;
-            }
-            100% {
-                left: 20px;
-                opacity: 0;
-            }
-        }
-
-        .hand-guide.hidden {
-            display: none;
-        }
-
-        /* 切れる演出 */
-        .cut-line {
-            position: absolute;
-            top: 76px;
-            left: 0;
-            width: 0;
-            height: 6px;
-            background: linear-gradient(90deg, 
-                #ff0000,
-                #ffd700,
-                #fff,
-                #ffd700,
-                #ff0000);
-            box-shadow: 
-                0 0 20px #ffd700, 
-                0 0 40px #fff,
-                0 0 60px #ff0000;
-            z-index: 15;
-            border-radius: 3px;
-        }
-
-        /* 切り取り進捗のスパーク */
-        .cut-spark {
-            position: absolute;
-            top: 73px;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, #fff 0%, #ffd700 50%, transparent 70%);
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
-            pointer-events: none;
-            z-index: 16;
-            opacity: 0;
-            transform: scale(0);
+            animation: ornamentGlow 2s ease-in-out infinite;
         }
 
-        .cut-spark.active {
-            opacity: 1;
-            transform: scale(1);
-            animation: sparkle 0.3s ease-out infinite;
+        @keyframes ornamentGlow {
+            0%, 100% { box-shadow: 0 0 5px currentColor; }
+            50% { box-shadow: 0 0 15px currentColor; }
         }
 
-        @keyframes sparkle {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0.5; }
-        }
-
-        /* 進捗バー */
-        .progress-container {
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            height: 8px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 4px;
-            overflow: hidden;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .progress-container.show {
-            opacity: 1;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #ffd700, #ff6b6b, #ffd700);
-            border-radius: 4px;
-            transition: width 0.1s linear;
-            box-shadow: 0 0 10px #ffd700;
-        }
-
-        .progress-text {
-            position: absolute;
-            bottom: -55px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #ffd700;
+        /* フッター */
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
             font-size: 0.9rem;
-            font-weight: 700;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            text-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
 
-        .progress-text.show {
-            opacity: 1;
+        .footer p {
+            margin: 5px 0;
         }
 
-        /* 暗転画面 */
-        .blackout-screen {
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.2rem;
+            }
+
+            .pack {
+                width: 110px;
+                height: 160px;
+            }
+
+            .pack-number {
+                font-size: 1.4rem;
+            }
+
+            .tree-left, .tree-right {
+                display: none;
+            }
+        }
+
+        /* パーティクルエフェクト */
+        .sparkle {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
             pointer-events: none;
-            transition: opacity 1s ease;
-        }
-
-        .blackout-screen.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        /* カウントダウン */
-        .countdown {
-            color: #ffd700;
-            font-size: 8rem;
-            font-weight: 900;
-            text-shadow: 
-                0 0 30px #ffd700,
-                0 0 60px #ff6b6b,
-                0 0 90px #c41e3a;
-            opacity: 0;
-            transform: scale(2);
-            transition: all 0.5s ease;
-        }
-
-        .countdown.show {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .countdown.hide {
-            opacity: 0;
-            transform: scale(0.5);
-        }
-
-        /* 結果画面 */
-        .result-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at center, #2d1b4e 0%, #1a0f2e 50%, #0d0618 100%);
-            z-index: 200;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s ease;
-        }
-
-        .result-screen.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        /* 紙吹雪エフェクト */
-        .confetti-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 250;
-        }
-
-        .confetti {
-            position: absolute;
             width: 10px;
             height: 10px;
-            animation: confetti-fall 3s linear infinite;
+            background: radial-gradient(circle, #ffd700, transparent);
+            border-radius: 50%;
+            animation: sparkleAnim 1s ease-out forwards;
+            z-index: 100;
         }
 
-        @keyframes confetti-fall {
+        @keyframes sparkleAnim {
             0% {
-                transform: translateY(-10vh) rotate(0deg);
+                transform: scale(0);
                 opacity: 1;
             }
             100% {
-                transform: translateY(110vh) rotate(720deg);
+                transform: scale(2);
                 opacity: 0;
             }
         }
 
-        /* 結果テキスト */
-        .result-badge {
-            position: relative;
-            padding: 30px 80px;
-            background: linear-gradient(135deg, #ffd700, #ffaa00, #ffd700);
+        /* みかちゃんセクション */
+        .mika-section {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mika-image {
+            width: 250px;
+            height: auto;
             border-radius: 20px;
             box-shadow: 
-                0 0 50px rgba(255, 215, 0, 0.8),
-                0 0 100px rgba(255, 215, 0, 0.4),
-                inset 0 2px 10px rgba(255,255,255,0.5);
-            animation: resultPulse 2s ease-in-out infinite;
-            transform: scale(0);
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(255, 182, 193, 0.4);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease;
         }
 
-        .result-badge.show {
-            transform: scale(1);
+        .mika-image:hover {
+            transform: scale(1.03);
         }
 
-        @keyframes resultPulse {
-            0%, 100% { box-shadow: 0 0 50px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 215, 0, 0.4); }
-            50% { box-shadow: 0 0 80px rgba(255, 215, 0, 1), 0 0 150px rgba(255, 215, 0, 0.6); }
-        }
-
-        .result-text {
-            font-size: 5rem;
-            font-weight: 900;
-            color: #c41e3a;
-            text-shadow: 
-                2px 2px 0 #fff,
-                4px 4px 0 rgba(196, 30, 58, 0.3);
-        }
-
-        /* ボタン */
-        .action-button {
-            margin-top: 50px;
-            padding: 20px 50px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            font-family: 'Zen Maru Gothic', sans-serif;
-            color: #fff;
-            background: linear-gradient(135deg, #c41e3a, #8b1528);
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 
-                0 8px 30px rgba(196, 30, 58, 0.5),
-                0 0 20px rgba(196, 30, 58, 0.3);
-            transform: scale(0);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* 吹き出し */
+        .speech-bubble {
             position: relative;
-            overflow: hidden;
+            background: linear-gradient(135deg, #fff 0%, #ffe4e9 100%);
+            border-radius: 25px;
+            padding: 20px 30px;
+            max-width: 280px;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(255, 105, 180, 0.3);
+            animation: bubbleBounce 2s ease-in-out infinite;
+            margin-top: 30px;
         }
 
-        .action-button.show {
-            transform: scale(1);
-            animation: buttonFloat 2s ease-in-out infinite;
+        @keyframes bubbleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
-        .action-button::before {
+        .speech-bubble::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(255,255,255,0.3) 50%,
-                transparent 70%
-            );
-            transform: rotate(45deg);
-            animation: shine 3s ease-in-out infinite;
+            left: -20px;
+            top: 30px;
+            border-width: 15px;
+            border-style: solid;
+            border-color: transparent #fff transparent transparent;
+            filter: drop-shadow(-3px 2px 3px rgba(0, 0, 0, 0.1));
         }
 
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
+        .speech-bubble p {
+            font-family: 'Kaisei Decol', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #c41e3a;
+            text-align: center;
+            margin: 0;
+            line-height: 1.6;
         }
 
-        @keyframes buttonFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-10px) scale(1.05); }
+        .speech-bubble .heart {
+            color: #ff69b4;
+            animation: heartBeat 1s ease-in-out infinite;
         }
 
-        .action-button:hover {
-            background: linear-gradient(135deg, #d42a4a, #a01830);
-            box-shadow: 
-                0 12px 40px rgba(196, 30, 58, 0.7),
-                0 0 30px rgba(196, 30, 58, 0.5);
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
 
-        .action-button:active {
-            transform: scale(0.95);
-        }
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .mika-section {
+                flex-direction: column;
+                align-items: center;
+            }
 
-        /* 星の装飾（結果画面） */
-        .star-decoration {
-            position: absolute;
-            font-size: 2rem;
-            animation: starFloat 3s ease-in-out infinite;
-        }
+            .mika-image {
+                width: 200px;
+            }
 
-        @keyframes starFloat {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
+            .speech-bubble {
+                margin-top: 10px;
+            }
 
-        /* 光の筋エフェクト */
-        .light-rays {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: conic-gradient(
-                from 0deg,
-                transparent 0deg,
-                rgba(255,215,0,0.1) 10deg,
-                transparent 20deg,
-                transparent 30deg,
-                rgba(255,215,0,0.1) 40deg,
-                transparent 50deg,
-                transparent 60deg,
-                rgba(255,215,0,0.1) 70deg,
-                transparent 80deg,
-                transparent 90deg
-            );
-            animation: raysSpin 20s linear infinite;
-            pointer-events: none;
-        }
+            .speech-bubble::before {
+                left: 50%;
+                top: -25px;
+                transform: translateX(-50%) rotate(90deg);
+            }
 
-        @keyframes raysSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            .speech-bubble p {
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 雪のエフェクト -->
+    <!-- 星 -->
+    <div class="stars" id="stars"></div>
+
+    <!-- 雪 -->
     <div class="snowflakes" id="snowflakes"></div>
 
-    <!-- パック画面 -->
-    <div class="pack-screen" id="packScreen">
-        <h1 class="title">🎄 クリスマスパック 🎄</h1>
-        
-        <div class="pack-container">
-            <div class="pack">
-                <!-- 装飾 -->
-                <span class="decoration">⭐</span>
-                <span class="decoration">❤️</span>
-                <span class="decoration">🎄</span>
-                <span class="decoration">✨</span>
-                
-                <!-- リボン -->
-                <div class="ribbon-vertical"></div>
-                <div class="ribbon-horizontal"></div>
-                <div class="ribbon-bow">
-                    <div class="bow-loop"></div>
-                    <div class="bow-loop"></div>
-                    <div class="bow-loop"></div>
-                    <div class="bow-loop"></div>
-                    <div class="bow-center"></div>
-                </div>
-                
-                <!-- 切り取りエリア -->
-                <div class="cut-area" id="cutArea">
-                    <span class="cut-instruction">👉 横になぞったら切れるよ！ 👈</span>
-                    <span class="cut-arrow">→ → → → → → →</span>
-                    <span class="hand-guide" id="handGuide">👆</span>
-                    
-                    <!-- 進捗表示 -->
-                    <div class="progress-container" id="progressContainer">
-                        <div class="progress-bar" id="progressBar"></div>
-                    </div>
-                    <span class="progress-text" id="progressText">なぞり中...</span>
-                </div>
-                
-                <!-- 切れる線 -->
-                <div class="cut-line" id="cutLine"></div>
-                <div class="cut-spark" id="cutSpark"></div>
+    <!-- クリスマスツリー（左） -->
+    <div class="tree-left">
+        <span class="tree-star">⭐</span>
+        <div class="tree-shape"></div>
+        <div class="tree-shape"></div>
+        <div class="tree-shape"></div>
+        <div class="tree-trunk"></div>
+    </div>
+
+    <!-- クリスマスツリー（右） -->
+    <div class="tree-right">
+        <span class="tree-star">⭐</span>
+        <div class="tree-shape"></div>
+        <div class="tree-shape"></div>
+        <div class="tree-shape"></div>
+        <div class="tree-trunk"></div>
+    </div>
+
+    <div class="container">
+        <!-- タイトル -->
+        <div class="title-container">
+            <h1 class="title">🎄 みかちゃんのクリスマスパック 🎄</h1>
+            <p class="subtitle">✨ スペシャルパックを選んでね！ ✨</p>
+            <div class="decoration">
+                <span>🎁</span>
+                <span>🔔</span>
+                <span>🎅</span>
+                <span>🔔</span>
+                <span>🎁</span>
             </div>
         </div>
-    </div>
 
-    <!-- 暗転画面 -->
-    <div class="blackout-screen" id="blackoutScreen">
-        <div class="countdown" id="countdown"></div>
-    </div>
-
-    <!-- 結果画面 -->
-    <div class="result-screen" id="resultScreen">
-        <div class="light-rays"></div>
-        <div class="confetti-container" id="confettiContainer"></div>
-        
-        <div class="result-badge" id="resultBadge">
-            <span class="result-text">２等</span>
+        <!-- みかちゃんと吹き出し -->
+        <div class="mika-section">
+            <img src="IMG_0054.PNG" alt="みかちゃん" class="mika-image">
+            <div class="speech-bubble">
+                <p>どれに１等が<br>入ってるかな〜<span class="heart">♡</span></p>
+            </div>
         </div>
-        
-        <button class="action-button" id="actionButton">
-            ここを押してね♡
-        </button>
+
+        <!-- パック -->
+        <div class="packs-container">
+            <!-- 1段目：4個 -->
+            <div class="pack-row">
+                <div class="pack" onclick="selectPack(1)">
+                    <div class="pack-inner">
+                        <div class="pack-ribbon"></div>
+                        <div class="pack-ribbon-h"></div>
+                        <div class="pack-bow">
+                            <div class="bow-loop bow-loop-left"></div>
+                            <div class="bow-loop bow-loop-right"></div>
+                            <div class="bow-center"></div>
+                        </div>
+                        <span class="pack-number">①</span>
+                    </div>
+                </div>
+                <div class="pack" onclick="selectPack(2)">
+                    <div class="pack-inner">
+                        <div class="pack-ribbon"></div>
+                        <div class="pack-ribbon-h"></div>
+                        <div class="pack-bow">
+                            <div class="bow-loop bow-loop-left"></div>
+                            <div class="bow-loop bow-loop-right"></div>
+                            <div class="bow-center"></div>
+                        </div>
+                        <span class="pack-number">②</span>
+                    </div>
+                </div>
+                <div class="pack" onclick="selectPack(3)">
+                    <div class="pack-inner">
+                        <div class="pack-ribbon"></div>
+                        <div class="pack-ribbon-h"></div>
+                        <div class="pack-bow">
+                            <div class="bow-loop bow-loop-left"></div>
+                            <div class="bow-loop bow-loop-right"></div>
+                            <div class="bow-center"></div>
+                        </div>
+                        <span class="pack-number">③</span>
+                    </div>
+                </div>
+                <div class="pack" onclick="selectPack(4)">
+                    <div class="pack-inner">
+                        <div class="pack-ribbon"></div>
+                        <div class="pack-ribbon-h"></div>
+                        <div class="pack-bow">
+                            <div class="bow-loop bow-loop-left"></div>
+                            <div class="bow-loop bow-loop-right"></div>
+                            <div class="bow-center"></div>
+                        </div>
+                        <span class="pack-number">④</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2段目：4個 -->
+            <div class="pack-row">
+                <div class="pack" onclick="selectPack(5)">
+                    <div class="pack-inner">
+                        <div class="pack-ribbon"></div>
+                        <div class="pack-ribbon-h"></div>
+                        <div class="pack-bow">
+                            <div class="bow-loop bow-loop-left"></div>
+                            <div class="bow-loop bow-loop-right"></div>
+                            <div class="bow-center"></div>
+                        </div>
+                        <span class="pack-number">⑤</span>
+                    </div>
+                </div>
+                <div class="pack" onclick="selectPack(6)">
+                    <div class="pack-inner">
+                        <div class="pack-ribbon"></div>
+                        <div class="pack-ribbon-h"></div>
+                        <div class="pack-bow">
+                            <div class="bow-loop bow-loop-left"></div>
+                            <div class="bow-loop bow-loop-right"></div>
+                            <div class="bow-center"></div>
+                        </div>
+                        <span class="pack-number">⑥</span>
+                    </div>
+                </div>
+                <div class="pack" onclick="selectPack(7)">
+                    <div class="pack-inner">
+                        <div class="pack-ribbon"></div>
+                        <div class="pack-ribbon-h"></div>
+                        <div class="pack-bow">
+                            <div class="bow-loop bow-loop-left"></div>
+                            <div class="bow-loop bow-loop-right"></div>
+                            <div class="bow-center"></div>
+                        </div>
+                        <span class="pack-number">⑦</span>
+                    </div>
+                </div>
+                <div class="pack" onclick="selectPack(8)">
+                    <div class="pack-inner">
+                        <div class="pack-ribbon"></div>
+                        <div class="pack-ribbon-h"></div>
+                        <div class="pack-bow">
+                            <div class="bow-loop bow-loop-left"></div>
+                            <div class="bow-loop bow-loop-right"></div>
+                            <div class="bow-center"></div>
+                        </div>
+                        <span class="pack-number">⑧</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3段目：2個 -->
+            <div class="pack-row">
+                <div class="pack" onclick="selectPack(9)">
+                    <div class="pack-inner">
+                        <div class="pack-ribbon"></div>
+                        <div class="pack-ribbon-h"></div>
+                        <div class="pack-bow">
+                            <div class="bow-loop bow-loop-left"></div>
+                            <div class="bow-loop bow-loop-right"></div>
+                            <div class="bow-center"></div>
+                        </div>
+                        <span class="pack-number">⑨</span>
+                    </div>
+                </div>
+                <div class="pack" onclick="selectPack(10)">
+                    <div class="pack-inner">
+                        <div class="pack-ribbon"></div>
+                        <div class="pack-ribbon-h"></div>
+                        <div class="pack-bow">
+                            <div class="bow-loop bow-loop-left"></div>
+                            <div class="bow-loop bow-loop-right"></div>
+                            <div class="bow-center"></div>
+                        </div>
+                        <span class="pack-number">⑩</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🎄 Merry Christmas! 🎄</p>
+            <p>どのパックにするか選んでね♪</p>
+        </div>
     </div>
 
     <script>
+        // 星を生成
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
         // 雪を生成
         function createSnowflakes() {
-            const container = document.getElementById('snowflakes');
-            const snowflakeChars = ['❄', '❅', '❆', '✧', '✦'];
+            const snowflakesContainer = document.getElementById('snowflakes');
+            const snowflakeChars = ['❄', '❅', '❆', '✻', '✼', '❉'];
             
             for (let i = 0; i < 50; i++) {
                 const snowflake = document.createElement('div');
@@ -742,210 +776,37 @@
                 snowflake.textContent = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
                 snowflake.style.left = Math.random() * 100 + '%';
                 snowflake.style.animationDuration = (Math.random() * 5 + 5) + 's';
-                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                snowflake.style.animationDelay = Math.random() * 10 + 's';
                 snowflake.style.fontSize = (Math.random() * 1 + 0.5) + 'rem';
-                container.appendChild(snowflake);
-            }
-        }
-        createSnowflakes();
-
-        // 切り取り機能
-        const cutArea = document.getElementById('cutArea');
-        const cutLine = document.getElementById('cutLine');
-        const cutSpark = document.getElementById('cutSpark');
-        const handGuide = document.getElementById('handGuide');
-        const progressContainer = document.getElementById('progressContainer');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
-        const packScreen = document.getElementById('packScreen');
-        const blackoutScreen = document.getElementById('blackoutScreen');
-        const countdown = document.getElementById('countdown');
-        const resultScreen = document.getElementById('resultScreen');
-        const resultBadge = document.getElementById('resultBadge');
-        const actionButton = document.getElementById('actionButton');
-
-        let isDragging = false;
-        let startX = 0;
-        let cutProgress = 0;
-        let isCut = false;
-
-        function handleStart(e) {
-            if (isCut) return;
-            isDragging = true;
-            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-            startX = clientX;
-            cutProgress = 0;
-            
-            // ドラッグ開始のビジュアルフィードバック
-            cutArea.classList.add('dragging');
-            handGuide.classList.add('hidden');
-            progressContainer.classList.add('show');
-            progressText.classList.add('show');
-            cutSpark.classList.add('active');
-        }
-
-        function handleMove(e) {
-            if (!isDragging || isCut) return;
-            
-            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-            const deltaX = clientX - startX;
-            
-            // 右方向へのドラッグのみ
-            if (deltaX > 0) {
-                cutProgress = Math.min(deltaX / 200, 1);
-                cutLine.style.width = (cutProgress * 100) + '%';
-                progressBar.style.width = (cutProgress * 100) + '%';
-                
-                // スパークの位置を更新
-                const cutLineRect = cutLine.getBoundingClientRect();
-                const packRect = cutArea.parentElement.getBoundingClientRect();
-                cutSpark.style.left = (cutProgress * 100) + '%';
-                
-                // 進捗テキストを更新
-                const percent = Math.round(cutProgress * 100);
-                if (percent < 30) {
-                    progressText.textContent = 'もっと右へ！→→→';
-                } else if (percent < 60) {
-                    progressText.textContent = 'いい感じ！✨';
-                } else if (percent < 90) {
-                    progressText.textContent = 'あと少し！🎄';
-                } else {
-                    progressText.textContent = '切れる！！🎉';
-                }
-                
-                // 振動エフェクト（モバイル）
-                if (navigator.vibrate && cutProgress > 0.9) {
-                    navigator.vibrate(50);
-                }
-                
-                // 切り取り完了
-                if (cutProgress >= 1) {
-                    completeCut();
-                }
+                snowflakesContainer.appendChild(snowflake);
             }
         }
 
-        function handleEnd() {
-            if (isCut) return;
-            isDragging = false;
-            cutArea.classList.remove('dragging');
-            
-            // 途中で離した場合はリセット
-            if (cutProgress < 1) {
-                cutLine.style.width = '0';
-                progressBar.style.width = '0';
-                cutProgress = 0;
-                progressContainer.classList.remove('show');
-                progressText.classList.remove('show');
-                cutSpark.classList.remove('active');
-                handGuide.classList.remove('hidden');
-            }
-        }
-
-        function completeCut() {
-            isCut = true;
-            isDragging = false;
-            
-            // 切れる効果音的な演出（画面を一瞬震わせる）
-            document.body.style.animation = 'none';
-            document.body.offsetHeight; // リフロー
-            
-            // 少し遅延してから暗転
-            setTimeout(() => {
-                packScreen.classList.add('hidden');
-                blackoutScreen.classList.add('active');
-                
-                // カウントダウン開始
-                startCountdown();
-            }, 500);
-        }
-
-        // イベントリスナー
-        cutArea.addEventListener('mousedown', handleStart);
-        cutArea.addEventListener('touchstart', handleStart);
-        document.addEventListener('mousemove', handleMove);
-        document.addEventListener('touchmove', handleMove);
-        document.addEventListener('mouseup', handleEnd);
-        document.addEventListener('touchend', handleEnd);
-
-        // カウントダウン
-        function startCountdown() {
-            const numbers = ['５', '４', '３', '２', '１', '０'];
-            let index = 0;
-            
-            function showNumber() {
-                if (index < numbers.length) {
-                    countdown.textContent = numbers[index];
-                    countdown.classList.remove('hide');
-                    countdown.classList.add('show');
+        // パック選択時のエフェクト
+        function selectPack(number) {
+            // キラキラエフェクト
+            const event = window.event;
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = (event.clientX + (Math.random() - 0.5) * 100) + 'px';
+                    sparkle.style.top = (event.clientY + (Math.random() - 0.5) * 100) + 'px';
+                    document.body.appendChild(sparkle);
                     
-                    setTimeout(() => {
-                        countdown.classList.remove('show');
-                        countdown.classList.add('hide');
-                        
-                        setTimeout(() => {
-                            index++;
-                            if (index < numbers.length) {
-                                showNumber();
-                            } else {
-                                // カウントダウン終了
-                                setTimeout(() => {
-                                    showResult();
-                                }, 500);
-                            }
-                        }, 300);
-                    }, 700);
-                }
+                    setTimeout(() => sparkle.remove(), 1000);
+                }, i * 50);
             }
-            
-            setTimeout(showNumber, 500);
-        }
 
-        // 結果表示
-        function showResult() {
-            blackoutScreen.classList.remove('active');
-            resultScreen.classList.add('active');
-            
-            // 紙吹雪を生成
-            createConfetti();
-            
-            // 結果バッジ表示
+            // アラート表示
             setTimeout(() => {
-                resultBadge.classList.add('show');
+                alert(`🎁 パック${number}を選んだね！🎄\n何が出るかな？✨`);
             }, 300);
-            
-            // ボタン表示
-            setTimeout(() => {
-                actionButton.classList.add('show');
-            }, 1000);
         }
 
-        // 紙吹雪
-        function createConfetti() {
-            const container = document.getElementById('confettiContainer');
-            const colors = ['#ffd700', '#c41e3a', '#228b22', '#ff69b4', '#00bfff', '#ff6347'];
-            
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                confetti.style.animationDelay = Math.random() * 2 + 's';
-                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                
-                if (Math.random() > 0.5) {
-                    confetti.style.borderRadius = '50%';
-                }
-                
-                container.appendChild(confetti);
-            }
-        }
-
-        // ボタンクリック
-        actionButton.addEventListener('click', () => {
-            alert('🎄 メリークリスマス！ 🎄\n\nおめでとうございます！２等です！');
-        });
+        // 初期化
+        createStars();
+        createSnowflakes();
     </script>
 </body>
 </html>
